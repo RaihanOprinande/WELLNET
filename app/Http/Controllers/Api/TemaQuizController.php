@@ -137,6 +137,19 @@ class TemaQuizController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = TemaQuiz::find($id);
+        if (empty($data) ) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ],404);
+        }
+
+        $post = $data->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil dihapus',
+        ],200);
     }
 }
