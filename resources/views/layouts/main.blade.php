@@ -21,80 +21,91 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
     <style>
-/* ==== DataTables Styling ==== */
-.dataTables_wrapper .dataTables_filter {
-    float: right;
-    text-align: right;
-    margin-bottom: 10px;
-}
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 6px 12px;
-    outline: none;
-    transition: all 0.2s ease;
-}
-.dataTables_wrapper .dataTables_filter input:focus {
-    border-color: #4f46e5; /* warna primary (biru keunguan) */
-    box-shadow: 0 0 5px rgba(79, 70, 229, 0.3);
-}
-.dataTables_wrapper .dataTables_length select {
-    border-radius: 10px;
-    padding: 5px 8px;
-}
-.dataTables_wrapper .dataTables_paginate {
-    margin-top: 10px;
-    text-align: right;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 5px 10px;
-    border-radius: 8px;
-    margin: 0 2px;
-    border: none !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background-color: #4f46e5 !important;
-    color: white !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    background-color: #6366f1 !important;
-    color: white !important;
-}
-.dataTables_wrapper .dataTables_info {
-    font-size: 0.875rem;
-    color: #555;
-    padding-top: 10px;
-}
+        /* ==== DataTables Styling ==== */
+        .dataTables_wrapper .dataTables_filter {
+            float: right;
+            text-align: right;
+            margin-bottom: 10px;
+        }
 
-.hover-bg-warning:hover {
-    background-color: #ffc107 !important;
-    color: #fff !important;
-}
-.hover-bg-danger:hover {
-    background-color: #ff0707 !important;
-    color: #fff !important;
-}
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 6px 12px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
 
-.hover-bg-info:hover {
-    background-color: #77ff07 !important;
-    color: #fff !important;
-}
-.transition {
-    transition: all 0.3s ease;
-}
-.hover-bg-warning:hover i {
-    color: #fff !important;
-}
-.hover-bg-danger:hover i {
-    color: #fff !important;
-}
-.hover-bg-info:hover i {
-    color: #fff !important;
-}
+        .dataTables_wrapper .dataTables_filter input:focus {
+            border-color: #4f46e5;
+            /* warna primary (biru keunguan) */
+            box-shadow: 0 0 5px rgba(79, 70, 229, 0.3);
+        }
 
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 10px;
+            padding: 5px 8px;
+        }
 
+        .dataTables_wrapper .dataTables_paginate {
+            margin-top: 10px;
+            text-align: right;
+        }
 
-</style>
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 5px 10px;
+            border-radius: 8px;
+            margin: 0 2px;
+            border: none !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #4f46e5 !important;
+            color: white !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #6366f1 !important;
+            color: white !important;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            font-size: 0.875rem;
+            color: #555;
+            padding-top: 10px;
+        }
+
+        .hover-bg-warning:hover {
+            background-color: #ffc107 !important;
+            color: #fff !important;
+        }
+
+        .hover-bg-danger:hover {
+            background-color: #ff0707 !important;
+            color: #fff !important;
+        }
+
+        .hover-bg-info:hover {
+            background-color: #77ff07 !important;
+            color: #fff !important;
+        }
+
+        .transition {
+            transition: all 0.3s ease;
+        }
+
+        .hover-bg-warning:hover i {
+            color: #fff !important;
+        }
+
+        .hover-bg-danger:hover i {
+            color: #fff !important;
+        }
+
+        .hover-bg-info:hover i {
+            color: #fff !important;
+        }
+    </style>
 
 </head>
 
@@ -149,13 +160,39 @@
                         </div>
                         <h2 class="mt-3">Success!</h2>
                         <p id="successModalMessage" class="mb-4">Data berhasil disimpan!</p>
-                        <button type="button" class="main-btn primary-btn btn-hover" data-bs-dismiss="modal">OK</button>
+                        <button type="button" class="main-btn primary-btn btn-hover"
+                            data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     {{-- END MODAL SUKSES --}}
+
+    {{-- MODAL GAGAL --}}
+    <div class="modal fade" id="failedModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content card-style text-center">
+                <div class="modal-body">
+                    <div class="p-4">
+                        <div style="color: #f44336; font-size: 80px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor"
+                                class="bi bi-x-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                            </svg>
+                        </div>
+                        <h2 class="mt-3">Failed!</h2>
+                        <p id="failedModalMessage" class="mb-4">Terjadi kesalahan.</p>
+                        <button type="button" class="main-btn danger-btn-outline btn-hover"
+                            data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END MODAL GAGAL --}}
 
     {{-- MODAL KONFIRMASI HAPUS --}}
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -172,7 +209,8 @@
                         <form id="deleteForm" method="POST" action="">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="main-btn danger-btn-outline btn-hover m-2" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="main-btn danger-btn-outline btn-hover m-2"
+                                data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="main-btn primary-btn btn-hover m-2">Ya, Hapus!</button>
                         </form>
                     </div>
@@ -183,35 +221,42 @@
     {{-- END MODAL KONFIRMASI HAPUS --}}
 
     <script>
-    $(document).ready(function() {
-        $('#table').DataTable({
-            pageLength: 5,
-            lengthMenu: [5, 10, 25, 50],
-            dom: '<"row mb-3"<"col-sm-6"l><"col-sm-6"f>>tip',
-            language: {
-                search: "",
-                searchPlaceholder: "Search...",
-                lengthMenu: "Tampilkan _MENU_ data per halaman",
-                zeroRecords: "Tidak ada data ditemukan",
-                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                infoEmpty: "Tidak ada data tersedia",
-                infoFiltered: "(disaring dari total _MAX_ data)",
-                paginate: {
-                    first: "Pertama",
-                    last: "Terakhir",
-                    next: "›",
-                    previous: "‹"
+        $(document).ready(function() {
+            $('#table').DataTable({
+                pageLength: 5,
+                lengthMenu: [5, 10, 25, 50],
+                dom: '<"row mb-3"<"col-sm-6"l><"col-sm-6"f>>tip',
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search...",
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Tidak ada data ditemukan",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data tersedia",
+                    infoFiltered: "(disaring dari total _MAX_ data)",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "›",
+                        previous: "‹"
+                    }
                 }
-            }
+            });
         });
-    });
         // SCRIPT MODAL SUKSES & HAPUS (LOGIKA GLOBAL)
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // LOGIKA MODAL SUKSES (Cek session dan tampilkan)
-            @if(session('status') == 'success_modal')
+            @if (session('status') == 'success_modal')
                 const successMessage = "{{ session('message') }}";
                 document.getElementById('successModalMessage').innerText = successMessage;
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+            @endif
+
+            @if (session('status') == 'failed_modal')
+                const successMessage = "{{ session('message') }}";
+                document.getElementById('failedModalMessage').innerText = successMessage;
+                const successModal = new bootstrap.Modal(document.getElementById('failedModal'));
                 successModal.show();
             @endif
 
@@ -220,7 +265,7 @@
             const deleteForm = document.getElementById('deleteForm');
 
             if (deleteModal && deleteForm) {
-                deleteModal.addEventListener('show.bs.modal', function (event) {
+                deleteModal.addEventListener('show.bs.modal', function(event) {
                     const button = event.relatedTarget;
                     const itemId = button.getAttribute('data-id');
                     let baseUrl = button.getAttribute('data-base-url');
@@ -245,8 +290,12 @@
         const ctx2 = document.getElementById("Chart2").getContext("2d");
         const chart2 = new Chart(ctx2, {
             type: "bar",
-            data: { /* ... */ },
-            options: { /* ... */ },
+            data: {
+                /* ... */
+            },
+            options: {
+                /* ... */
+            },
         });
         // =========== Bar Chart end
     </script>
