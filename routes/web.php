@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\TemaQuizController;
-
+use App\Http\Controllers\Admin\PsychoeducationController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
