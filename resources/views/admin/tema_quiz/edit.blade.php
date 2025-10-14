@@ -9,7 +9,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="title">
-                        <h2>Edit Tema Quiz: {{ $tema->title }}</h2>
+                        <h2>Edit Tema Quiz</h2>
                     </div>
                 </div>
                 <div class="col-md-6">

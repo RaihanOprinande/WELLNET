@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/morris.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
+    <!-- SUMMERNOTE -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
     <style>
 /* ==== DataTables Styling ==== */
@@ -72,6 +74,11 @@
     background-color: #ff0707 !important;
     color: #fff !important;
 }
+
+.hover-bg-info:hover {
+    background-color: #77ff07 !important;
+    color: #fff !important;
+}
 .transition {
     transition: all 0.3s ease;
 }
@@ -81,6 +88,10 @@
 .hover-bg-danger:hover i {
     color: #fff !important;
 }
+.hover-bg-info:hover i {
+    color: #fff !important;
+}
+
 
 
 </style>
@@ -115,6 +126,8 @@
     <!-- DataTables CDN -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@5/tinymce.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 
     {{-- TEMPAT MODAL GLOBAL --}}

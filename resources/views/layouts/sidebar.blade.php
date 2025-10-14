@@ -66,13 +66,14 @@
           </a>
           <ul id="ddmenu_4" class="collapse dropdown-nav">
             <li>
-              <a href="tema-quiz.html"> Tema Quiz </a>
+                <a href="{{ route('tema_quiz.index') }}"> Tema Quiz </a>
             </li>
+
             <li>
               <a href="soal-quiz.html"> Soal Quiz </a>
             </li>
             <li>
-              <a href="materi-psychoeducation.html"> Materi Psychoeducation </a>
+              <a href="{{ route('psychoeducation.index') }}"> Materi Psychoeducation </a>
             </li>
             <li>
               <a href="log-quiz-user.html"> Log Quiz User </a>
