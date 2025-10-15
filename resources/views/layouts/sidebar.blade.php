@@ -76,7 +76,7 @@
                           <a href="{{ route('psychoeducation.index') }}"> Materi Psychoeducation </a>
                       </li>
                       <li>
-                          <a href="log-quiz-user.html"> Log Quiz User </a>
+                          <a href="{{ route('log_quiz.index') }}"> Log Quiz User </a>
                       </li>
                   </ul>
               </li>
