@@ -8,7 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class TemaQuiz extends Model
 {
-    use HasFactory,HasApiTokens;
+    use HasFactory, HasApiTokens;
 
     protected $table = 'tema_quiz';
 
