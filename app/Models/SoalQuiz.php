@@ -9,7 +9,7 @@ use App\Models\TemaQuiz;
 
 class SoalQuiz extends Model
 {
-    use HasFactory;
+    use HasFactory,HasApiTokens;
 
     protected $table = 'soal_quiz';
 
