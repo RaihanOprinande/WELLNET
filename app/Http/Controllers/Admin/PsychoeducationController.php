@@ -22,25 +22,33 @@ class PsychoeducationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'link_yt' => 'nullable|string|max:255',
-            'content' => 'required|string',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'image' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
+                'link_yt' => 'nullable|string|max:255',
+                'content' => 'required|string',
+            ]);
 
-        $data = $request->all();
+            $data = $request->all();
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('psychoeducation', 'public');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('psychoeducation', 'public');
+            }
+
+            Psychoeducation::create($data);
+
+            return redirect()->route('psychoeducation.index')->with([
+                'status' => 'success_modal',
+                'message' => 'Data berhasil disimpan!',
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with([
+                'status' => 'failed_modal',
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        Psychoeducation::create($data);
-
-        return redirect()->route('psychoeducation.index')->with([
-            'status' => 'success_modal',
-            'message' => 'Data berhasil disimpan!',
-        ]);
     }
 
     public function edit($id)
