@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LogQuizController;
 use App\Http\Controllers\Api\OpsiQuizController;
 use App\Http\Controllers\Api\PsychoeducationController;
 use App\Http\Controllers\Api\SoalQuizController;
@@ -43,3 +44,13 @@ Route::get('opsi_quiz/quiz/{id}',[OpsiQuizController::class,'showcustom']);
 
 
 // END API OPSI QUIZ
+
+// API LOG QUIZ
+
+Route::get('log_quiz',[LogQuizController::class,'index']);
+Route::get('log_quiz/store',[LogQuizController::class,'store']);
+Route::get('log_quiz/{id}',[LogQuizController::class,'show']);
+Route::get('log_quiz/user/{id}',[LogQuizController::class,'showuser']);
+
+
+// END API LOG QUIZ
