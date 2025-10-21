@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PsychoeducationController;
 use App\Http\Controllers\Admin\SoalQuizController;
 use App\Http\Controllers\Admin\LogQuizController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserChildrenController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -18,6 +19,7 @@ Route::resource('admin/psychoeducation', PsychoeducationController::class);
 Route::resource('admin/soal_quiz', SoalQuizController::class);
 Route::resource('admin/log_quiz', LogQuizController::class);
 Route::resource('admin/users', UserController::class);
+Route::resource('admin/user_children', UserChildrenController::class);
 
 
 Route::get('/login', [AuthController::class, 'login'])->name('login');
