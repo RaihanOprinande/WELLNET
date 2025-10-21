@@ -93,12 +93,6 @@
                                             </td>
                                         </tr>
                                     @endforeach
-
-                                    @if($tema_quiz->isEmpty())
-                                        <tr>
-                                            <td colspan="7" class="text-center text-muted">Tidak ada data tema quiz.</td>
-                                        </tr>
-                                    @endif
                                 </tbody>
                             </table>
                         </div>

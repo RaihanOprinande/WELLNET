@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/logo-wellnet.svg') }}" type="image/x-icon" />
-    <title>Dashboard</title>
+    <title>Wellnet</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/lineicons.css') }}" />
@@ -16,11 +16,39 @@
     <link rel="stylesheet" href="{{ asset('assets/css/morris.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/datatable.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}" />
-    <!-- SUMMERNOTE -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
     <style>
+
+/* Scroll khusus untuk tabel DataTables */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+}
+
+.dataTables_wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* **PERBAIKAN CSS TAMBAHAN UNTUK MERAPIKAN DATA KOSONG** */
+.dataTables_empty {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Mengatur ulang margin pada dataTables_info agar tidak terlalu menempel jika kosong */
+.dataTables_wrapper .dataTables_info {
+    font-size: 0.875rem;
+    color: #555;
+    padding-top: 10px;
+    margin-top: 10px; /* Tambahkan sedikit jarak dari area tabel di atas */
+}
+/* **AKHIR PERBAIKAN CSS** */
+
+
         /* ==== DataTables Styling ==== */
         .dataTables_wrapper .dataTables_filter {
             float: right;
@@ -67,12 +95,6 @@
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
             background-color: #6366f1 !important;
             color: white !important;
-        }
-
-        .dataTables_wrapper .dataTables_info {
-            font-size: 0.875rem;
-            color: #555;
-            padding-top: 10px;
         }
 
         .hover-bg-warning:hover {
@@ -134,7 +156,6 @@
     {{-- <script src="{{ asset('assets/js/datatable.js') }}"></script> File yang memuat logika DataTables --}}
     <script src="{{ asset('assets/js/Sortable.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
-    <!-- DataTables CDN -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@5/tinymce.min.js"></script>
@@ -221,29 +242,33 @@
     {{-- END MODAL KONFIRMASI HAPUS --}}
 
     <script>
-        $(document).ready(function() {
-            $('#table').DataTable({
-                pageLength: 5,
-                lengthMenu: [5, 10, 25, 50],
-                dom: '<"row mb-3"<"col-sm-6"l><"col-sm-6"f>>tip',
-                language: {
-                    search: "",
-                    searchPlaceholder: "Search...",
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Tidak ada data ditemukan",
-                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                    infoEmpty: "Tidak ada data tersedia",
-                    infoFiltered: "(disaring dari total _MAX_ data)",
-                    paginate: {
-                        first: "Pertama",
-                        last: "Terakhir",
-                        next: "›",
-                        previous: "‹"
+        $(document).ready(function () {
+            // DataTables Initialization
+            if ($('#table').length) { // Pastikan elemen tabel ada
+                $('#table').DataTable({
+                    scrollX: true,
+                    pageLength: 10,
+                    ordering: true,
+                    language: {
+                        search: "",
+                        searchPlaceholder: "Cari data...",
+                        lengthMenu: "Tampilkan _MENU_ data per halaman",
+                        zeroRecords: "Tidak ada data ditemukan", // Muncul di tengah tabel
+                        info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                        infoEmpty: "Tidak ada data tersedia", // Muncul di bagian bawah info
+                        infoFiltered: "(disaring dari total _MAX_ data)",
+                        paginate: {
+                            first: "Pertama",
+                            last: "Terakhir",
+                            next: "›",
+                            previous: "‹"
+                        }
                     }
-                }
-            });
+                });
+            }
         });
-        // SCRIPT MODAL SUKSES & HAPUS (LOGIKA GLOBAL)
+
+        // SCRIPT MODAL SUKSES & HAPUS (LOGIKA GLOBAL - Tidak diubah)
         document.addEventListener('DOMContentLoaded', function() {
             // LOGIKA MODAL SUKSES (Cek session dan tampilkan)
             @if (session('status') == 'success_modal')

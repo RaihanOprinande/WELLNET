@@ -8,13 +8,17 @@
         <div class="title-wrapper pt-30">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h2>Psychoeducation</h2>
+                    <div class="title">
+                        <h2>Psychoeducation</h2>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
-                                <li class="breadcrumb-item"><a href="#">Quiz & Psychoeducation</a></li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Quiz & Psychoeducation</a>
+                                </li>
                                 <li class="breadcrumb-item active">Psychoeducation</li>
                             </ol>
                         </nav>
@@ -23,15 +27,23 @@
             </div>
         </div>
 
+        {{-- Tabel --}}
         <div class="tables-wrapper">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card-style mb-30">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6>Daftar Psychoeducation</h6>
-                            <a href="{{ route('psychoeducation.create') }}" class="main-btn btn-sm primary-btn btn-hover">
-                                <i class="lni lni-plus"></i> Tambah Data
-                            </a>
+                        <div class="row align-items-center">
+                            <div class="title d-flex justify-content-between">
+                                <div class="left">
+                                    <h6 class="mb-10">Daftar Psychoeducation</h6>
+                                </div>
+                                <div class="right">
+                                    <a href="{{ route('psychoeducation.create') }}"
+                                       class="main-btn btn-sm primary-btn btn-hover mb-20">
+                                        <i class="lni lni-plus"></i> Tambah Data
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="table-responsive">
@@ -48,38 +60,43 @@
                                 <tbody>
                                     @foreach($psychoeducation as $i => $item)
                                         <tr>
-                                            <td>{{ $i + 1 }}</td>
+                                            <td><h6>{{ $i + 1 }}</h6></td>
                                             <td>
                                                 @if($item->image)
-                                                    <img src="{{ asset('storage/'.$item->image) }}" width="70" class="rounded">
+                                                    <img src="{{ asset('storage/'.$item->image) }}" width="70"
+                                                        class="rounded" alt="gambar">
                                                 @else
                                                     <span class="text-muted">Tidak ada</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $item->title }}</td>
+                                            <td><p>{{ $item->title }}</p></td>
                                             <td>
                                                 @if($item->link_yt)
-                                                    <a href="{{ $item->link_yt }}" target="_blank">{{ $item->link_yt }}</a>
+                                                    <a href="{{ $item->link_yt }}" target="_blank"
+                                                       class="text-truncate d-block"
+                                                       style="max-width: 250px;">
+                                                       {{ $item->link_yt }}
+                                                    </a>
                                                 @else
                                                     <span class="text-muted">-</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                {{-- Tombol Show: Ikon biru polos --}}
+                                                {{-- Tombol Show --}}
                                                 <a href="{{ route('psychoeducation.show', $item->id) }}"
-                                                    class="text-info p-1 me-1 rounded hover-bg-info transition"
-                                                    style="font-size: 1.2rem;">
-                                                    <i class="lni lni-eye"></i>
+                                                   class="text-info p-1 me-1 rounded hover-bg-info transition"
+                                                   style="font-size: 1.2rem;">
+                                                   <i class="lni lni-eye"></i>
                                                 </a>
 
-                                                {{-- Tombol Edit: Ikon kuning polos --}}
+                                                {{-- Tombol Edit --}}
                                                 <a href="{{ route('psychoeducation.edit', $item->id) }}"
-                                                    class="text-warning p-1 me-1 rounded hover-bg-warning transition"
-                                                    style="font-size: 1.2rem;">
-                                                    <i class="lni lni-pencil"></i>
+                                                   class="text-warning p-1 me-1 rounded hover-bg-warning transition"
+                                                   style="font-size: 1.2rem;">
+                                                   <i class="lni lni-pencil"></i>
                                                 </a>
 
-                                                {{-- Tombol Hapus: Pemicu modal --}}
+                                                {{-- Tombol Hapus --}}
                                                 <button type="button"
                                                     class="delete-button text-danger p-1 me-1 rounded hover-bg-danger transition"
                                                     data-bs-toggle="modal"
@@ -92,16 +109,9 @@
                                             </td>
                                         </tr>
                                     @endforeach
-
-                                    @if($psychoeducation->isEmpty())
-                                        <tr>
-                                            <td colspan="5" class="text-center text-muted">Belum ada data psychoeducation.</td>
-                                        </tr>
-                                    @endif
                                 </tbody>
                             </table>
-                        </div>
-
+                        </div> {{-- end table-responsive --}}
                     </div>
                 </div>
             </div>

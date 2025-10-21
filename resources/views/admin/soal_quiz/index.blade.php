@@ -85,12 +85,6 @@
                                             </td>
                                         </tr>
                                     @endforeach
-
-                                    @if($soal_quiz->isEmpty())
-                                        <tr>
-                                            <td colspan="5" class="text-center text-muted">Belum ada data soal quiz.</td>
-                                        </tr>
-                                    @endif
                                 </tbody>
                             </table>
                         </div> {{-- /table-responsive --}}

@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 class LogQuizController extends Controller
 {
     public function index()
-    {
-        $log_quiz = LogQuiz::with(['tema', 'soal', 'user'])->latest()->get();
-        return view('admin.log_quiz.index', compact('log_quiz'));
-    }
+{
+    $log_quiz = LogQuiz::with(['user', 'tema', 'soal'])->paginate(10);
+    return view('admin.log_quiz.index', compact('log_quiz'));
+}
+
 }

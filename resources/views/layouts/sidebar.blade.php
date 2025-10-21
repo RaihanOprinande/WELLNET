@@ -11,7 +11,7 @@
       <nav class="sidebar-nav">
           <ul>
               <li class="nav-item active">
-                  <a href="/">
+                  <a href="{{ url('/') }}"">
                       <span class="icon">
                           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +30,7 @@
                   <hr />
               </span>
               <li class="nav-item">
-                  <a href="users.html">
+                  <a href="{{ route('users.index')  }}">
                       <span class="icon">
                           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
