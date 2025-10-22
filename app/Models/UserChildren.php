@@ -23,4 +23,10 @@ class UserChildren extends Model
         return $this->belongsTo(User::class, 'parent_id')->where('role', 'parent');
     }
 
+    public function setting()
+    {
+        return $this->hasOne(UserSetting::class, 'child_id');
+    }
+
+
 }
