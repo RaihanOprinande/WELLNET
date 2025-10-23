@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <h2>Tambah User</h2>
 
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label>Username</label>
@@ -29,6 +29,14 @@
                 <option value="parent">Parent</option>
             </select>
         </div>
+
+        <div class="mb-3">
+                <label for="profile" class="form-label">Foto Profil (Opsional)</label>
+                <input type="file" name="profile" id="profile" class="form-control" accept="image/*">
+                @error('profile')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
 
         <button type="submit" class="btn btn-success">Simpan</button>
         <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>

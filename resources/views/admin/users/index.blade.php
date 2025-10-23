@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Profile</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -23,6 +24,12 @@
             @foreach ($users as $item)
             <tr>
                 <td>{{ $item->id }}</td>
+                <td>
+                    @if($item->profile)
+    <img src="{{ asset('storage/' . $item->profile) }}" alt="Profile" width="80" class="rounded-circle">
+@else
+    <img src="{{ asset('images/default-avatar.png') }}" alt="Default" width="80" class="rounded-circle">
+@endif
                 <td>{{ $item->username }}</td>
                 <td>{{ $item->email }}</td>
                 <td>{{ ucfirst($item->role) }}</td>

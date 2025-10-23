@@ -16,6 +16,7 @@ class UserChildren extends Model
         'parent_id',
         'username',
         'email',
+        'profile',
     ];
 
     public function parent()

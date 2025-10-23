@@ -51,6 +51,16 @@
                   <li>
                     <a href="#" onclick="logout()"> <i class="lni lni-exit"></i> Sign Out </a>
                   </li>
+                  <div class="mt-4">
+      <a href="{{ route('logout') }}"
+         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+         class="btn btn-danger">
+        Logout
+      </a>
+      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+      </form>
+    </div>
                 </ul>
               </div>
               <!-- profile end -->
@@ -59,4 +69,4 @@
         </div>
       </div>
     </header>
-    
+

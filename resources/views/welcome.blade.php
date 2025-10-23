@@ -10,8 +10,10 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="title">
-                <h2>Dashboard</h2>
+                <h3>Selamat Datang, {{ Auth::user()->username ?? Auth::user()->email }}</h3>
+    <p>Anda login sebagai <strong>{{ Auth::user()->role }}</strong>.</p>
               </div>
+
             </div>
             <!-- end col -->
             <div class="col-md-6">
