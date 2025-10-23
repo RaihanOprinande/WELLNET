@@ -12,7 +12,10 @@ class PsychoeducationController extends Controller
     public function index()
     {
         $psychoeducation = Psychoeducation::orderBy('id', 'desc')->get();
-        return view('admin.psychoeducation.index', compact('psychoeducation'));
+
+        $title = $psychoeducation->pluck('title');
+
+        return view('admin.psychoeducation.index', compact('psychoeducation','title'));
     }
 
     public function create()
