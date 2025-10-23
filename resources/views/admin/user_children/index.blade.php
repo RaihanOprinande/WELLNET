@@ -32,6 +32,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
+                            <th>Profile</th>
                             <th>Nama Anak</th>
                             <th>Email</th>
                             <th>Parent</th>
@@ -43,6 +44,13 @@
                         @foreach ($children as $index => $child)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
+                                <td>
+                                    @if($child->profile)
+    <img src="{{ asset('storage/' . $child->profile) }}" alt="Profile" width="80" class="rounded-circle">
+@else
+    <img src="{{ asset('images/default-avatar.png') }}" alt="Default" width="80" class="rounded-circle">
+@endif
+
                                 <td>{{ $child->username }}</td>
                                 <td>{{ $child->email }}</td>
                                 <td>{{ $child->parent?->username ?? '-' }}</td>

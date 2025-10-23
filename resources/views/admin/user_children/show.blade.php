@@ -11,6 +11,19 @@
 
         <div class="card p-4">
             <div class="mb-3">
+                <label class="form-label fw-bold">Profile</label>
+                <div>
+                    @if($user_child->profile)
+    <img src="{{ asset('storage/' . $user_child->profile) }}" alt="Profile" width="80" class="rounded-circle">
+@else
+    <img src="{{ asset('images/default-avatar.png') }}" alt="Default" width="80" class="rounded-circle">
+@endif
+
+                </div>
+            </div>
+
+
+            <div class="mb-3">
                 <label class="form-label fw-bold">Nama Anak</label>
                 <p class="form-control-plaintext">{{ $user_child->username }}</p>
             </div>
@@ -19,6 +32,7 @@
                 <label class="form-label fw-bold">Email Anak</label>
                 <p class="form-control-plaintext">{{ $user_child->email }}</p>
             </div>
+
 
             <div class="mb-3">
                 <label class="form-label fw-bold">Parent</label>

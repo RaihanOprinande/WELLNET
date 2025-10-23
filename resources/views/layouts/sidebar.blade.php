@@ -1,6 +1,10 @@
+  @php
+    $role = Auth::user()->role ?? null;
+@endphp
+
   <aside class="sidebar-nav-wrapper">
       <div class="navbar-logo">
-          <a href="{{ url('/') }}" class="d-flex align-items-center text-decoration-none">
+          <a href="{{ url('/admin/dashboard') }}" class="d-flex align-items-center text-decoration-none">
               <img src="{{ asset('assets/images/logo/logo-wellnet.svg') }}" alt="Logo kiri" class="img-fluid me-2"
                   style="max-height: 45px; width: auto;" />
 
@@ -8,10 +12,12 @@
           </a>
 
       </div>
+
       <nav class="sidebar-nav">
           <ul>
+            @if ($role === 'super_admin')
               <li class="nav-item active">
-                  <a href="{{ url('/') }}"">
+                  <a href="{{ url('/admin/dashboard') }}"">
                       <span class="icon">
                           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
@@ -45,6 +51,7 @@
                       <span class="text">Users</span>
                   </a>
               </li>
+              @elseif ($role === 'admin')
               <li class="nav-item nav-item-has-children">
                   <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_4"
                       aria-controls="ddmenu_4" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,6 +112,7 @@
                       </li>
                   </ul>
               </li>
+                @endif
           </ul>
       </nav>
   </aside>
