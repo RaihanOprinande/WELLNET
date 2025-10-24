@@ -23,26 +23,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'password' => 'required|min:6',
-            'role' => 'required|in:admin,personal,parent,superadmin',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:6',
+                'role' => 'required|in:admin,personal,parent',
+            ]);
 
-        $profilePath = null;
-        if ($request->hasFile('profile')) {
-            $profilePath = $request->file('profile')->store('profiles', 'public');
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
         }
-
-        User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'profile' => $profilePath,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-        ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan!');
     }
@@ -59,32 +57,32 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'role' => 'required|in:admin,personal,parent,superadmin',
-        ]);
 
-        $data = $request->only(['username', 'email', 'role']);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'role' => 'required|in:admin,personal,parent',
+            ]);
 
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        // Upload foto baru jika ada
-        if ($request->hasFile('profile')) {
-            // Hapus foto lama jika ada
-            if ($user->profile && Storage::disk('public')->exists($user->profile)) {
-                Storage::disk('public')->delete($user->profile);
+            $data = $request->only(['name', 'email', 'role']);
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
             }
 
-            $data['profile'] = $request->file('profile')->store('profiles', 'public');
+            $user->update($data);
+
+            return redirect()->route('users.index')->with([
+                'status' => 'success_modal',
+                'message' => 'Data berhasil disimpan!',
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with([
+                'status' => 'failed_modal',
+                'message' => 'Gagal mengupdate data',$e->getMessage(),
+            ]);
         }
 
-        $user->update($data);
-
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui!');
     }
 
     public function destroy(User $user)

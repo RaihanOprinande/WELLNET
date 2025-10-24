@@ -20,33 +20,34 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
     <style>
+        /* Scroll khusus untuk tabel DataTables */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+        }
 
-/* Scroll khusus untuk tabel DataTables */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 8px;
-}
+        .dataTables_wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
 
-.dataTables_wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
+        /* **PERBAIKAN CSS TAMBAHAN UNTUK MERAPIKAN DATA KOSONG** */
+        .dataTables_empty {
+            border-top: none !important;
+            border-bottom: none !important;
+        }
 
-/* **PERBAIKAN CSS TAMBAHAN UNTUK MERAPIKAN DATA KOSONG** */
-.dataTables_empty {
-    border-top: none !important;
-    border-bottom: none !important;
-}
+        /* Mengatur ulang margin pada dataTables_info agar tidak terlalu menempel jika kosong */
+        .dataTables_wrapper .dataTables_info {
+            font-size: 0.875rem;
+            color: #555;
+            padding-top: 10px;
+            margin-top: 10px;
+            /* Tambahkan sedikit jarak dari area tabel di atas */
+        }
 
-/* Mengatur ulang margin pada dataTables_info agar tidak terlalu menempel jika kosong */
-.dataTables_wrapper .dataTables_info {
-    font-size: 0.875rem;
-    color: #555;
-    padding-top: 10px;
-    margin-top: 10px; /* Tambahkan sedikit jarak dari area tabel di atas */
-}
-/* **AKHIR PERBAIKAN CSS** */
+        /* **AKHIR PERBAIKAN CSS** */
 
 
         /* ==== DataTables Styling ==== */
@@ -242,10 +243,11 @@
     {{-- END MODAL KONFIRMASI HAPUS --}}
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // DataTables Initialization
-            if ($('#table').length) { // Pastikan elemen tabel ada
+            if ($('#table').length) {
                 $('#table').DataTable({
+                    searchable: true,
                     scrollX: true,
                     pageLength: 10,
                     ordering: true,
