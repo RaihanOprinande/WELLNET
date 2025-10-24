@@ -22,19 +22,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'role' => 'required|in:admin,personal,parent',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:6',
+                'role' => 'required|in:admin,personal,parent',
+            ]);
 
-        User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-        ]);
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => $request->role,
+            ]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
+        }
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan!');
     }
@@ -51,20 +56,32 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,personal,parent',
-        ]);
 
-        $data = $request->only(['username', 'email', 'role']);
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'role' => 'required|in:admin,personal,parent',
+            ]);
+
+            $data = $request->only(['name', 'email', 'role']);
+            if ($request->filled('password')) {
+                $data['password'] = Hash::make($request->password);
+            }
+
+            $user->update($data);
+
+            return redirect()->route('users.index')->with([
+                'status' => 'success_modal',
+                'message' => 'Data berhasil disimpan!',
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with([
+                'status' => 'failed_modal',
+                'message' => 'Gagal mengupdate data',$e->getMessage(),
+            ]);
         }
 
-        $user->update($data);
-
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui!');
     }
 
     public function destroy(User $user)

@@ -3,18 +3,18 @@
 @section('title', 'Soal Quiz')
 
 @section('content')
-    <style>
-        /* Pastikan tombol aksi tidak di-wrap di dalam <td> */
-        .table-actions {
-            /* Lebar minimum yang cukup untuk 3 ikon (sekitar 100px) */
-            min-width: 200px;
-            /* Pastikan konten di dalamnya tidak memecah baris */
-            white-space: nowrap;
-            /* Rata tengah (opsional, untuk estetika) */
-            text-align: center;
-        }
-    </style>
+
     <section class="section">
+        <style>
+            .col-aksi {
+                /* Lebar minimum untuk menampung dua ikon dan padding, misalnya 80px */
+                min-width: 80px;
+                /* Memastikan konten di dalam <td> TIDAK PERNAH memecah baris */
+                white-space: nowrap;
+                /* Menghentikan konten meluber keluar (opsional, tergantung tema) */
+                overflow: hidden;
+            }
+        </style>
         <div class="container-fluid">
 
             {{-- Header Judul & Breadcrumb --}}
@@ -67,8 +67,8 @@
                                             <th>
                                                 <h6>Jawaban Benar</h6>
                                             </th>
-                                            <th class="table-actions">
-                                                <h6 class="table-actions">Aksi</h6>
+                                            <th class="col-aksi">
+                                                <h6 class="col-aksi">Aksi</h6>
                                             </th>
                                         </tr>
                                     </thead>
@@ -80,7 +80,7 @@
                                                 <td>{{ $item->tema->week ?? '-' }}</td>
                                                 <td>{{ Str::limit(strip_tags($item->pertanyaan), 40) }}</td>
                                                 <td>{{ Str::limit(strip_tags($item->jawaban_benar), 20) }}</td>
-                                                <td>
+                                                <td class="col-aksi">
                                                     {{-- Tombol Show: Ikon biru polos --}}
                                                     <a href="{{ route('soal_quiz.show', $item->id) }}"
                                                         class="text-info p-1 me-1 rounded hover-bg-info transition"

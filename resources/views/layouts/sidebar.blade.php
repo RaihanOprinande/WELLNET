@@ -11,7 +11,7 @@
       <nav class="sidebar-nav">
           <ul>
               <li class="nav-item active">
-                  <a href="{{ url('/') }}"">
+                  <a href="{{ url('/') }}">
                       <span class="icon">
                           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +30,7 @@
                   <hr />
               </span>
               <li class="nav-item">
-                  <a href="{{ route('users.index')  }}">
+                  <a href="{{ route('users.index') }}">
                       <span class="icon">
                           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                               xmlns="http://www.w3.org/2000/svg">
@@ -44,6 +44,34 @@
                       </span>
                       <span class="text">Users</span>
                   </a>
+              </li>
+              <li class="nav-item nav-item-has-children">
+                  <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_5"
+                      aria-controls="ddmenu_5" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="icon">
+                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                  d="M3.33334 11.6667C3.33334 10.7462 4.07954 10 5.00001 10H15C15.9205 10 16.6667 10.7462 16.6667 11.6667C16.6667 15.3486 13.6819 18.3333 10 18.3333C6.31811 18.3333 3.33334 15.3486 3.33334 11.6667Z">
+                              </path>
+                              <path
+                                  d="M13.3333 4.99999C13.3333 6.84094 11.8409 8.33332 9.99999 8.33332C8.15904 8.33332 6.66666 6.84094 6.66666 4.99999C6.66666 3.15904 8.15904 1.66666 9.99999 1.66666C11.8409 1.66666 13.3333 3.15904 13.3333 4.99999Z">
+                              </path>
+                          </svg>
+                      </span>
+                      <span class="text">Users</span>
+                  </a>
+                  <ul id="ddmenu_5" class="collapse dropdown-nav">
+                      <li>
+                          <a href="{{ route('users.index') }}"> Admin </a>
+                      </li>
+                      <li>
+                          <a href="{{ route('soal_quiz.index') }}"> User </a>
+                      </li>
+                      <li>
+                          <a href="{{ route('psychoeducation.index') }}"> Children </a>
+                      </li>
+                  </ul>
               </li>
               <li class="nav-item nav-item-has-children">
                   <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_4"
