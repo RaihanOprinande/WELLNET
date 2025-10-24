@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -13,8 +14,37 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function register()
+    public function loginProcess(Request $request)
     {
-        return view('auth.register');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $user = Auth::user();
+
+            // ✅ Hanya allow role super_admin & admin
+            if (in_array($user->role, ['super_admin', 'admin'])) {
+                return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, ' . ucfirst($user->role) . '!');
+            }
+
+            // ❌ Role lain langsung logout
+            Auth::logout();
+            return back()->withErrors(['email' => 'Akses ditolak! Anda bukan admin.']);
+        }
+
+        return back()->withErrors(['email' => 'Email atau password salah.']);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Berhasil logout!');
     }
 }

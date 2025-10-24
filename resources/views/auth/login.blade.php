@@ -57,40 +57,38 @@
               <p class="text-sm mb-25">
                 Silakan masuk ke akun Anda untuk melanjutkan penggunaan sistem.
               </p>
-              <form id="loginForm" action="#">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="input-style-1">
-                      <label>Email</label>
-                      <input id="email" type="email" placeholder="Masukkan email Anda" required />
-                    </div>
-                  </div>
-                  <!-- end col -->
-                  <div class="col-12">
-                    <div class="input-style-1">
-                      <label>Password</label>
-                      <input id="password" type="password" placeholder="Masukkan password Anda" required />
-                    </div>
-                  </div>
-                  <!-- end col -->
-                  <div class="col-xxl-12 col-lg-12 col-md-12">
-                    <div class="text-end mb-30">
-                      <a href="reset-password.html" class="hover-underline">
-                        Lupa Password?
-                      </a>
-                    </div>
-                  </div>
-                  <!-- end col -->
-                  <div class="col-12">
-                    <div class="button-group d-flex justify-content-center flex-wrap">
-                      <button class="main-btn primary-btn btn-hover w-100 text-center">
-                        Sign In
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <!-- end row -->
-              </form>
+              <form method="POST" action="{{ route('login.process') }}">
+  @csrf
+  <div class="row">
+    <div class="col-12">
+      <div class="input-style-1">
+        <label>Email</label>
+        <input name="email" type="email" placeholder="Masukkan email Anda" value="{{ old('email') }}" required />
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="input-style-1">
+        <label>Password</label>
+        <input name="password" type="password" placeholder="Masukkan password Anda" required />
+      </div>
+    </div>
+
+    @error('email')
+      <div class="alert alert-danger mt-2">{{ $message }}</div>
+    @enderror
+
+    @if (session('success'))
+      <div class="alert alert-success mt-2">{{ session('success') }}</div>
+    @endif
+
+    <div class="col-12 mt-3">
+      <button class="main-btn primary-btn w-100">Sign In</button>
+    </div>
+  </div>
+</form>
+
+
               <div class="singin-option pt-40">
                 <p class="text-sm text-medium text-dark text-center">
                   Belum punya akun?

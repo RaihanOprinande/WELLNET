@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -86,6 +87,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        if ($user->profile && Storage::disk('public')->exists($user->profile)) {
+            Storage::disk('public')->delete($user->profile);
+        }
+
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus!');
     }
