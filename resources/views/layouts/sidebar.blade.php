@@ -70,13 +70,16 @@
                       </a>
                       <ul id="ddmenu_5" class="collapse dropdown-nav">
                           <li>
-                              <a href="{{ route('users.index') }}"> Admins </a>
+                              <a href="/admin/admin"> Admins </a>
                           </li>
                           <li>
-                              <a href="{{ route('soal_quiz.index') }}"> Users/parents </a>
+                              <a href="{{ route('users.index') }}"> Personal/parents </a>
                           </li>
                           <li>
-                              <a href="{{ route('psychoeducation.index') }}"> Children </a>
+                              <a href="/admin/user_children"> Children </a>
+                          </li>
+                          <li>
+                              <a href="/admin/user_setting"> Users Setting </a>
                           </li>
                       </ul>
                   </li>

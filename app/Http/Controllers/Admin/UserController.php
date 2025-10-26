@@ -10,11 +10,17 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function index()
+    public function admin()
     {
-        $users = User::all();
+        $users = User::where('role','admin')->get();
+        return view('admin.users.admin', compact('users'));
+    }
+
+    public function index(){
+        $users = User::where('role', 'parent')->orwhere('role','personal')->get();
         return view('admin.users.index', compact('users'));
     }
+
 
     public function create()
     {
@@ -92,6 +98,9 @@ class UserController extends Controller
         }
 
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus!');
+            return redirect()->back()->with([
+                'status' => 'success_modal',
+                'message' => 'Data berhasil disimpan!',
+            ]);
     }
 }
