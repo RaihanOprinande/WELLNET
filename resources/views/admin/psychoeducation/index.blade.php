@@ -47,7 +47,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table id="table" class="table">
+                                <table id="table" class="table" style="width: 100%">
                                     <thead>
                                         <tr>
                                             <th>
@@ -71,7 +71,7 @@
                                         @foreach ($psychoeducation as $i => $item)
                                             <tr>
                                                 <td>
-                                                    <h6>{{ $i + 1 }}</h6>
+                                                    <h6>{{ $loop->iteration }}</h6>
                                                 </td>
                                                 <td>
                                                     @if ($item->image)

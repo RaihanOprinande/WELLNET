@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Users')
+@section('title', 'Admins')
 
 @section('content')
     <div class="container-fluid">
@@ -8,14 +8,14 @@
         <div class="title-wrapper pt-30">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h2>Users</h2>
+                    <h2>Admins</h2>
                 </div>
                 <div class="col-md-6">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
                                 <li class="breadcrumb-item"><a href="#">Users</a></li>
-                                <li class="breadcrumb-item active">Users / parents</li>
+                                <li class="breadcrumb-item active">Admin</li>
                             </ol>
                         </nav>
                     </div>
