@@ -28,7 +28,7 @@
                                 <li class="breadcrumb-item">
                                     <a href="#">Users</a>
                                 </li>
-                                <li class="breadcrumb-item active">User Setting</li>
+                                <li class="breadcrumb-item active">Akun Setting</li>
                             </ol>
                         </nav>
                     </div>

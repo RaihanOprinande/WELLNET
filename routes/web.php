@@ -42,7 +42,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('log_quiz', LogQuizController::class);
     Route::resource('users', UserController::class);
     Route::resource('user_children', UserChildrenController::class);
-    Route::get('akun', [UserController::class, 'akun']);
+    Route::get('akun', [UserController::class, 'akun'])->name('users.akun');
     Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
     Route::put('profile', [UserController::class, 'updateProfile'])->name('users.updateProfile');
 

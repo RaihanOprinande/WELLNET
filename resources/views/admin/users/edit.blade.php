@@ -105,9 +105,16 @@
                             {{-- Button --}}
                             <div class="col-12 mt-4">
                                 <div class="button-group d-flex justify-content-end flex-wrap">
-                                    <a href="{{ route('users.index') }}" class="main-btn danger-btn-outline btn-hover m-2">
-                                        <i class="lni lni-cross-circle"></i> Batal
-                                    </a>
+                                    @php
+    $cancelRoute = Auth::user()->role === 'super_admin'
+        ? route('users.index')
+        : route('users.akun');
+@endphp
+
+<a href="{{ $cancelRoute }}" class="main-btn danger-btn-outline btn-hover m-2">
+    <i class="lni lni-cross-circle"></i> Batal
+</a>
+
                                     <button type="submit" class="main-btn primary-btn btn-hover m-2">
                                         <i class="lni lni-checkmark-circle"></i> Update
                                     </button>

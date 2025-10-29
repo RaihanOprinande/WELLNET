@@ -33,7 +33,7 @@ class UserController extends Controller
         // Gabungkan semua data menjadi satu koleksi
         $accounts = $users->concat($children);
 
-        return view('admin.users.admin', compact('accounts'));
+        return view('admin.users.akun', compact('accounts'));
     }
 
     public function index()
@@ -86,46 +86,49 @@ class UserController extends Controller
         return view('admin.users.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user)
-    {
-        try {
-            $request->validate([
-                'username' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email,' . $user->id,
-                'role' => 'required|in:admin,personal,parent',
-                'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // ✅ Tambah validasi profile
-            ]);
 
-            $data = $request->only(['username', 'email', 'role']);
-            if ($request->filled('password')) {
-                $data['password'] = Hash::make($request->password);
-            }
+public function update(Request $request, User $user)
+{
+    try {
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,personal,parent',
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-            // 🔹 Update profile jika diupload baru
-            if ($request->hasFile('profile')) {
-                // Hapus file lama jika ada
-                if ($user->profile && Storage::disk('public')->exists($user->profile)) {
-                    Storage::disk('public')->delete($user->profile);
-                }
-
-                // Simpan file baru
-                $path = $request->file('profile')->store('profiles', 'public');
-                $data['profile'] = $path;
-            }
-
-            $user->update($data);
-
-            return redirect()->route('users.index')->with([
-                'status' => 'success_modal',
-                'message' => 'Data berhasil disimpan!',
-            ]);
-        } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with([
-                'status' => 'failed_modal',
-                'message' => 'Gagal mengupdate data: ' . $e->getMessage(),
-            ]);
+        $data = $request->only(['username', 'email', 'role']);
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
         }
+
+        if ($request->hasFile('profile')) {
+            if ($user->profile && Storage::disk('public')->exists($user->profile)) {
+                Storage::disk('public')->delete($user->profile);
+            }
+            $data['profile'] = $request->file('profile')->store('profiles', 'public');
+        }
+
+        $user->update($data);
+
+        // 🔹 Redirect conditional berdasarkan role yang login
+        $redirectRoute = Auth::user()->role === 'super_admin'
+            ? route('users.index')
+            : route('users.akun');
+
+        return redirect($redirectRoute)->with([
+            'status' => 'success_modal',
+            'message' => 'Data berhasil disimpan!',
+        ]);
+
+    } catch (\Exception $e) {
+        return redirect()->back()->withInput()->with([
+            'status' => 'failed_modal',
+            'message' => 'Gagal mengupdate data: ' . $e->getMessage(),
+        ]);
     }
+}
+    
     public function profile()
     {
         $user = Auth::user(); // Ambil user yang sedang login

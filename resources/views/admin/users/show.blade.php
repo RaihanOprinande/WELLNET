@@ -71,9 +71,15 @@
                 <a href="{{ route('users.edit', $user->id) }}" class="main-btn primary-btn btn-hover me-2">
                     <i class="lni lni-pencil"></i> Edit
                 </a>
-                <a href="{{ route('users.index') }}" class="main-btn light-btn btn-hover">
-                    <i class="lni lni-arrow-left"></i> Kembali
-                </a>
+                 @php
+    $cancelRoute = Auth::user()->role === 'super_admin'
+        ? route('users.index')
+        : route('users.akun');
+@endphp
+
+<a href="{{ $cancelRoute }}" class="main-btn light btn-hover">
+    <i class="lni lni-cross-circle"></i> Kembali
+</a>
             </div>
         </div>
     </div>

@@ -73,7 +73,7 @@
                 <a href="{{ route('tema_quiz.edit', $tema_quiz->id) }}" class="main-btn primary-btn btn-hover me-2">
                     <i class="lni lni-pencil"></i> Edit
                 </a>
-                <a href="{{ route('tema_quiz.index') }}" class="main-btn light-btn btn-hover">
+                <a href="{{ route('tema_quiz.index') }}" class="main-btn light btn-hover">
                     <i class="lni lni-arrow-left"></i> Kembali
                 </a>
             </div>
