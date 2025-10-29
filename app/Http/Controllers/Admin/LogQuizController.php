@@ -14,4 +14,10 @@ class LogQuizController extends Controller
     return view('admin.log_quiz.index', compact('log_quiz'));
 }
 
+public function show()
+{
+    $log_quiz = LogQuiz::with(['user', 'tema', 'soal'])->paginate(10);
+    return view('admin.log_quiz.index', compact('log_quiz'));
+}
+
 }

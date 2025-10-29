@@ -42,14 +42,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('log_quiz', LogQuizController::class);
     Route::resource('users', UserController::class);
     Route::resource('user_children', UserChildrenController::class);
-    Route::get('admin', [UserController::class, 'admin']);
+    Route::get('akun', [UserController::class, 'akun']);
+    Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::put('profile', [UserController::class, 'updateProfile'])->name('users.updateProfile');
 
     // Subgroup untuk user_setting
     Route::prefix('user_setting')->group(function () {
         Route::get('/', [UserSettingController::class, 'index'])->name('user_setting.index');
         Route::get('/create/personal', [UserSettingController::class, 'createPersonal'])->name('user_setting.createPersonal');
         Route::get('/create/children', [UserSettingController::class, 'createChildren'])->name('user_setting.createChildren');
-
         Route::post('/store', [UserSettingController::class, 'store'])->name('user_setting.store');
         Route::get('/{user_setting}/edit', [UserSettingController::class, 'edit'])->name('user_setting.edit');
         Route::put('/{user_setting}', [UserSettingController::class, 'update'])->name('user_setting.update');

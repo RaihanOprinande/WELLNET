@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'profile',
         'password',
@@ -60,5 +60,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserSetting::class, 'user_id');
     }
+
 
 }

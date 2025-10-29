@@ -1,22 +1,23 @@
 @extends('layouts.main')
 
-@section('title', 'Detail User')
+@section('title', 'Detail Tema Quiz')
 
 @section('content')
 <section class="section">
     <div class="container-fluid">
+
         {{-- Header --}}
         <div class="title-wrapper pt-30 mb-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h2>Detail User</h2>
+                    <h2>Detail Tema Quiz</h2>
                 </div>
                 <div class="col-md-6 text-end">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('users.index') }}">Users Admin</a>
+                                    <a href="{{ route('tema_quiz.index') }}">Tema Quiz</a>
                                 </li>
                                 <li class="breadcrumb-item active">Detail</li>
                             </ol>
@@ -28,53 +29,55 @@
 
         {{-- Card Detail --}}
         <div class="card-style mb-30 p-4">
-            {{-- Profile --}}
+
+            {{-- Gambar Sampul --}}
             <div class="text-center mb-4">
-                <img src="{{ $user->profile ? asset('storage/' . $user->profile) : asset('images/default-avatar.png') }}"
-                     alt="Profile" class="rounded-circle shadow-sm" style="width: 150px; height: 150px; object-fit: cover;">
-                <h3 class="mt-3">{{ $user->username }}</h3>
-                <span class="badge
-                    @if($user->role === 'admin') bg-danger
-                    @elseif($user->role === 'personal') bg-secondary
-                    @else bg-success
-                    @endif">
-                    {{ ucfirst($user->role) }}
-                </span>
+                <img src="{{ $tema_quiz->image ? asset('storage/' . $tema_quiz->image) : asset('images/default-image.png') }}"
+                     alt="Gambar Tema Quiz"
+                     class="rounded shadow-sm"
+                     style="width: 200px; height: 200px; object-fit: cover;">
             </div>
 
             {{-- Informasi --}}
             <div class="row">
                 <div class="col-md-6">
                     <div class="input-style-1 mb-3">
-                        <label>Username</label>
-                        <input type="text" class="form-control" value="{{ $user->username }}" disabled>
+                        <label>Judul</label>
+                        <input type="text" class="form-control" value="{{ $tema_quiz->title ?? '-' }}" disabled>
                     </div>
                     <div class="input-style-1 mb-3">
-                        <label>Email</label>
-                        <input type="text" class="form-control" value="{{ $user->email }}" disabled>
+                        <label>Topik</label>
+                        <input type="text" class="form-control" value="{{ $tema_quiz->topik ?? '-' }}" disabled>
                     </div>
+
                 </div>
+
                 <div class="col-md-6">
                     <div class="input-style-1 mb-3">
-                        <label>Role</label>
-                        <input type="text" class="form-control" value="{{ ucfirst($user->role) }}" disabled>
+                        <label>Materi Relevan</label>
+                        <input type="text" class="form-control" value="{{ $tema_quiz->materi_relevan ?? '-' }}" disabled>
                     </div>
                     <div class="input-style-1 mb-3">
-                        <label>Tanggal Daftar</label>
-                        <input type="text" class="form-control" value="{{ $user->created_at->format('d M Y') }}" disabled>
+                        <label>Minggu</label>
+                        <input type="text" class="form-control" value="{{ $tema_quiz->week ?? '-' }}" disabled>
                     </div>
                 </div>
+                 <div class="input-style-1 mb-3">
+                        <label>Deskripsi</label>
+                        <textarea class="form-control" rows="6" disabled>{{ $tema_quiz->description ?? '-' }}</textarea>
+                    </div>
             </div>
 
-            {{-- Optional Actions --}}
+            {{-- Actions --}}
             <div class="col-12 mt-3 d-flex justify-content-end">
-                <a href="{{ route('users.edit', $user->id) }}" class="main-btn primary-btn btn-hover me-2">
+                <a href="{{ route('tema_quiz.edit', $tema_quiz->id) }}" class="main-btn primary-btn btn-hover me-2">
                     <i class="lni lni-pencil"></i> Edit
                 </a>
-                <a href="{{ route('users.index') }}" class="main-btn light-btn btn-hover">
+                <a href="{{ route('tema_quiz.index') }}" class="main-btn light-btn btn-hover">
                     <i class="lni lni-arrow-left"></i> Kembali
                 </a>
             </div>
+
         </div>
     </div>
 </section>
@@ -87,10 +90,6 @@
     }
     .shadow-sm {
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-    }
-    .badge {
-        padding: 0.4em 0.8em;
-        font-size: 0.85rem;
     }
 </style>
 @endsection

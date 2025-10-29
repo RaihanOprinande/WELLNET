@@ -46,10 +46,10 @@
                                         <h6 class="mb-10">Daftar Tema Quiz</h6>
                                     </div>
                                     <div class="right">
-                                        <button class="main-btn btn-sm primary-btn btn-hover mb-20" data-bs-toggle="modal"
-                                            data-bs-target="#createModaltemaQuiz">
+                                        <a href="{{ route('tema_quiz.create') }}"
+                                            class="main-btn btn-sm primary-btn btn-hover mb-20">
                                             <i class="lni lni-plus"></i> Tambah Data
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -108,6 +108,12 @@
                                                     <p>{{ $item->week }}</p>
                                                 </td>
                                                 <td class="col-aksi">
+                                                    {{-- Tombol Lihat: Ikon polos --}}
+                                                    <a href="{{ route('tema_quiz.show', $item->id) }}"
+                                                        class="text-info p-1 me-1 rounded hover-bg-info transition"
+                                                        style="font-size: 1.2rem;">
+                                                        <i class="lni lni-eye"></i>
+                                                    </a>
                                                     {{-- Tombol Edit: Ikon polos --}}
                                                     <a href="{{ route('tema_quiz.edit', $item->id) }}"
                                                         class="text-warning p-1 me-1 rounded hover-bg-warning transition"
@@ -136,8 +142,5 @@
             </div>
         </div>
     </section>
-
-    {{-- Memanggil modal form create (Form ini tetap di sini) --}}
-    @include('admin.tema_quiz.create')
 
 @endsection

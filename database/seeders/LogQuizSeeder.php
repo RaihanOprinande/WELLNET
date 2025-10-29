@@ -14,7 +14,7 @@ class LogQuizSeeder extends Seeder
     {
         // ====== 0️⃣ Pastikan User Ada ======
         $user = User::first() ?? User::create([
-            'name' => 'Khairal Satria',
+            'username' => 'Khairal Satria',
             'email' => 'khairal@example.com',
             'password' => bcrypt('password'),
         ]);
