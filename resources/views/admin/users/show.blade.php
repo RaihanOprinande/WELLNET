@@ -16,7 +16,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('users.index') }}">Users Admin</a>
+                                    <a href="{{ route('users.index') }}">Users</a>
                                 </li>
                                 <li class="breadcrumb-item active">Detail</li>
                             </ol>

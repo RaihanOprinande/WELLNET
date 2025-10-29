@@ -9,14 +9,14 @@
         <div class="title-wrapper pt-30 mb-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h2>Detail Data Anak</h2>
+                    <h2>Detail User</h2>
                 </div>
                 <div class="col-md-6 text-end">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('users.akun') }}">Users Anak</a>
+                                    <a href="{{ route('users.akun') }}">Users</a>
                                 </li>
                                 <li class="breadcrumb-item active">Detail</li>
                             </ol>
@@ -40,11 +40,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="input-style-1 mb-3">
-                        <label>Username Anak</label>
+                        <label>Username</label>
                         <input type="text" class="form-control" value="{{ $user_child->username }}" disabled>
                     </div>
                     <div class="input-style-1 mb-3">
-                        <label>Email Anak</label>
+                        <label>Email</label>
                         <input type="text" class="form-control" value="{{ $user_child->email }}" disabled>
                     </div>
                 </div>
