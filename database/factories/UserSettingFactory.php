@@ -17,34 +17,21 @@ class UserSettingFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-{
-        // 1. Dapatkan user_id (Wajib diisi dan harus role 'personal')
-        // Jika tidak ada user 'personal', ini bisa menyebabkan error, jadi pastikan data seeding User sudah benar.
-        $personalUser = User::where('role', 'personal')->inRandomOrder()->first();
-        $userId = $personalUser ? $personalUser->id : User::inRandomOrder()->value('id');
-
-        // 2. Tentukan child_id (Nullable)
-        $childId = null;
-
-        // 50% dari data akan diisi child_id, 50% akan NULL
-        if ($this->faker->boolean(50)) {
-            $childId = UserChildren::inRandomOrder()->value('id');
-        }
-
-        // --- Data Acak Lainnya (Sama seperti sebelumnya) ---
+    {
+        // Default values untuk kolom jadwal, dll.
         $sleepStartHour = $this->faker->numberBetween(20, 23);
         $sleepEndHour = $this->faker->numberBetween(4, 7);
         $digitalFreetimeStartHour = $this->faker->numberBetween(15, 17);
         $digitalFreetimeEndHour = $this->faker->numberBetween(18, 20);
 
         return [
-            // Kolom Relasi yang sudah diatur
-            'user_id' => $userId,
-            'child_id' => $childId, // Bisa NULL atau berisi ID anak
+            // Dibuat NULL/Dummy di definition, akan ditimpa oleh state
+            'user_id' => null,
+            'child_id' => null,
 
             // Data Acak Lainnya
-            'jenis_kelamin' => $this->faker->randomElement(['Laki-laki', 'perempuan']),
-            'umur' => $this->faker->numberBetween(8, 65),
+            'jenis_kelamin' => $this->faker->randomElement(['Laki-laki', 'Perempuan']),
+            'umur' => $this->faker->numberBetween(18, 65), // Default umur untuk user dewasa
             'skor' => $this->faker->numberBetween(100, 15000),
             'lencana' => $this->faker->randomElement(['Seedling','Sprout','Explorer','Trailblazer','Mountaineer','Skywalker','Digital Sage']),
             'downtime' => $this->faker->numberBetween(30, 180),
@@ -53,5 +40,32 @@ class UserSettingFactory extends Factory
             'digital_freetime_start' => sprintf('%02d:00:00', $digitalFreetimeStartHour),
             'digital_freetime_end' => sprintf('%02d:00:00', $digitalFreetimeEndHour),
         ];
+    }
+
+    /**
+     * State untuk User dengan role 'personal': child_id HARUS NULL
+     */
+    public function isPersonal(int $userId): Factory
+    {
+        return $this->state(fn (array $attributes) => [
+            'user_id' => $userId, // User ID dari role 'personal'
+            'child_id' => null,   // children_id HARUS NULL
+            'umur' => $this->faker->numberBetween(18, 65), // Umur dewasa
+        ]);
+    }
+
+    /**
+     * State untuk User dengan role 'parent': child_id HARUS terisi ID anak
+     */
+    public function isParent(int $userId): Factory
+    {
+        // Ambil ID anak yang belum memiliki setting (atau secara acak)
+        $childId = UserChildren::inRandomOrder()->value('id');
+
+        return $this->state(fn (array $attributes) => [
+            'user_id' => $userId,     // User ID dari role 'parent'
+            'child_id' => $childId,   // children_id HARUS terisi
+            'umur' => $this->faker->numberBetween(8, 17), // Umur disesuaikan untuk anak
+        ]);
     }
 }

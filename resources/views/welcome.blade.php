@@ -41,7 +41,7 @@
                         </div>
                         <div class="content">
                             <h6 class="mb-10">Jumlah Pengguna</h6>
-                            <h3 class="text-bold mb-10">34567</h3>
+                            <h3 class="text-bold mb-10">{{ $JumlahPengguna ?? '-' }}</h3>
                         </div>
                     </div>
                     <!-- End Icon Cart -->
@@ -79,8 +79,8 @@
                             <i class="lni lni-user"></i>
                         </div>
                         <div class="content">
-                            <h6 class="mb-10">Top User</h6>
-                            <h3 class="text-bold mb-10">Hydtech</h3>
+                            <h6 class="mb-10">Top Skor User</h6>
+                            <h3 class="text-bold mb-10">{{ $namaPengguna ?? '-' }}</h3>
                         </div>
                     </div>
                     <!-- End Icon Cart -->

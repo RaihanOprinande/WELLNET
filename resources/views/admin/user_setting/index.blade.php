@@ -79,6 +79,9 @@
                                                 <h6>Email</h6>
                                             </th>
                                             <th>
+                                                <h6>Email Orangtua</h6>
+                                            </th>
+                                            <th>
                                                 <h6>Jenis Kelamin</h6>
                                             </th>
                                             <th>
@@ -109,6 +112,7 @@
                                             @php
                                                 $user = $setting->user;
                                                 $children = $user->children ?? [];
+
                                             @endphp
                                             <tr>
                                                 <td>
@@ -117,9 +121,9 @@
 
                                                 {{-- Username --}}
                                                 <td>
-                                                    {{-- @if ($user->role === 'personal') --}}
-                                                    <p>{{ $user->name }}</p>
-                                                    {{-- @elseif ($user->role === 'parent')
+                                                    {{-- @if ($settings->child_id === 'personal')
+                                                        <p>{{ $user->name }}</p>
+                                                    @elseif ($user->role === 'parent')
                                                         @if (count($children) > 0)
                                                             @foreach ($children as $child)
                                                                 <p>{{ $child->name }}</p>
@@ -132,17 +136,23 @@
 
                                                 {{-- Email --}}
                                                 <td>
-                                                    @if ($user->role === 'personal')
+                                                    {{-- Cek kolom child_id di objek setting saat ini --}}
+                                                    @if ($setting->child_id !== null && $child)
+                                                        {{-- child_id terisi, tampilkan email anak --}}
+                                                        <p>{{ $child->email }}</p>
+                                                    @elseif ($user)
+                                                        {{-- child_id NULL, user_id terisi, tampilkan email user --}}
                                                         <p>{{ $user->email }}</p>
-                                                    @elseif ($user->role === 'parent')
-                                                        @if (count($children) > 0)
-                                                            @foreach ($children as $child)
-                                                                <p>{{ $child->email }} <br><small class="text-muted">email
-                                                                        orang tua: {{ $user->email }}</small></p>
-                                                            @endforeach
-                                                        @else
-                                                            <em class="text-muted">-</em>
-                                                        @endif
+                                                    @else
+                                                        <p>N/A</p>
+                                                    @endif
+
+                                                    {{-- Email Orangtua --}}
+                                                <td>
+                                                    @if ($user->role === 'parent')
+                                                        <p>{{ $user->email }}</p>
+                                                    @elseif ($user->role === 'personal')
+                                                        -
                                                     @endif
                                                 </td>
 

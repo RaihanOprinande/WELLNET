@@ -30,7 +30,7 @@ class PsychoeducationController extends Controller
                 'title' => 'required|string|max:255',
                 'image' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
                 'link_yt' => 'nullable|string|max:255',
-                'content' => 'required|string',
+                'content' => 'required',
             ]);
 
             $data = $request->all();
@@ -41,17 +41,21 @@ class PsychoeducationController extends Controller
 
             Psychoeducation::create($data);
 
+            // dd($request->all());
+
             return redirect()->route('psychoeducation.index')->with([
                 'status' => 'success_modal',
                 'message' => 'Data berhasil disimpan!',
             ]);
 
         } catch (\Exception $e) {
+            // dd($request->all());
             return redirect()->back()->withInput()->with([
                 'status' => 'failed_modal',
                 'message' => $e->getMessage(),
             ]);
         }
+
     }
 
     public function edit($id)
