@@ -51,7 +51,7 @@
                                     @foreach ($users as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->name }}</td>
+                                            <td>{{ $item->username }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>{{ ucfirst($item->role) }}</td>
                                             <td>

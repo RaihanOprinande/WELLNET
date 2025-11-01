@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogQuizController;
 use App\Http\Controllers\Api\OpsiQuizController;
 use App\Http\Controllers\Api\PsychoeducationController;
+use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\SoalQuizController;
 use App\Http\Controllers\Api\TemaQuizController;
 use Illuminate\Http\Request;
@@ -54,3 +56,15 @@ Route::get('log_quiz/user/{id}',[LogQuizController::class,'showuser']);
 
 
 // END API LOG QUIZ
+
+// API LOGIN
+
+Route::post('login',[LoginController::class,'store']);
+
+// END API LOGIN
+
+// API REGISTER
+
+Route::post('register',[RegisterController::class,'store']);
+
+// END API REGISTER
