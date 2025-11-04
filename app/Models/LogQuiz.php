@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Models\UserSetting;
 use App\Models\TemaQuiz;
 use App\Models\SoalQuiz;
 
@@ -15,15 +15,16 @@ class LogQuiz extends Model
     protected $table = 'log_quiz';
 
     protected $fillable = [
-        'user_id',
+        'setting_id',
         'temaquiz_id',
         'soalquiz_id',
         'jawaban_user',
     ];
 
-    public function user()
+    // Relasi ke user_setting (bukan langsung ke user lagi)
+    public function setting()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(UserSetting::class, 'setting_id');
     }
 
     public function tema()

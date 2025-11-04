@@ -139,7 +139,7 @@
                         <span class="text">Wellbeing</span>
                     </a>
                     <ul id="menuWellbeing" class="collapse dropdown-nav {{ $wellbeingActive ? 'show' : '' }}">
-                        {{-- <li><a href="{{ route('log_pelanggaran.index') }}" class="{{ request()->is('admin/log_pelanggaran*') ? 'active' : '' }}">Log Pelanggaran</a></li> --}}
+                        <li><a href="{{ route('log_pelanggaran.index') }}" class="{{ request()->is('admin/log_pelanggaran*') ? 'active' : '' }}">Log Pelanggaran</a></li>
                     </ul>
                 </li>
             @endif
