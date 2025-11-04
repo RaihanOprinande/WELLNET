@@ -37,4 +37,15 @@ class UserSetting extends Model
         return $this->belongsTo(UserChildren::class, 'child_id');
     }
 
+    public function logPelanggaran()
+    {
+        return $this->hasMany(LogPelanggaran::class, 'setting_id');
+    }
+
+    public function logQuiz()
+    {
+        return $this->hasMany(LogQuiz::class, 'setting_id');
+    }
+
+
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\TemaQuizController;
 use App\Http\Controllers\Admin\PsychoeducationController;
 use App\Http\Controllers\Admin\SoalQuizController;
 use App\Http\Controllers\Admin\LogQuizController;
+use App\Http\Controllers\Admin\LogPelanggaranController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserChildrenController;
 use App\Http\Controllers\Admin\UserSettingController;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('psychoeducation', PsychoeducationController::class);
     Route::resource('soal_quiz', SoalQuizController::class);
     Route::resource('log_quiz', LogQuizController::class);
+    Route::resource('log_pelanggaran', LogPelanggaranController::class);
     Route::resource('users', UserController::class);
     Route::resource('user_children', UserChildrenController::class);
     Route::get('akun', [UserController::class, 'akun'])->name('users.akun');

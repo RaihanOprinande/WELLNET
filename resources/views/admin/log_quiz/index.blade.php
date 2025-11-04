@@ -58,7 +58,7 @@
                                         <th><h6>Pertanyaan</h6></th>
                                         <th><h6>Week</h6></th>
                                         <th><h6>Tema Quiz</h6></th>
-                                        <th><h6>Jawaban User</h6></th>
+                                        <th><h6>Jawaban</h6></th>
                                         <th><h6>Waktu</h6></th>
                                         <th class="col-aksi"><h6 class="col-aksi">Aksi</h6></th>
                                     </tr>
@@ -67,15 +67,27 @@
                                     @foreach ($log_quiz as $i => $item)
                                     <tr>
                                         <td><h6>{{ $i + 1 }}</h6></td>
-                                        <td><p>{{ $item->user->name ?? '-' }}</p></td>
+
+                                        {{-- Username / Nama Anak --}}
+                                        <td>
+                                            <p>
+                                                @if ($item->setting && $item->setting->child)
+                                                    {{ $item->setting->child->nama_anak }}
+                                                @elseif ($item->setting && $item->setting->user)
+                                                    {{ $item->setting->user->username }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </p>
+                                        </td>
+
                                         <td><p>{{ Str::limit(strip_tags($item->soal->pertanyaan), 30) ?? '-' }}</p></td>
                                         <td><p>{{ $item->tema->week ?? '-' }}</p></td>
                                         <td><p>{{ $item->tema->title ?? '-' }}</p></td>
                                         <td><p>{{ $item->jawaban_user }}</p></td>
                                         <td><p>{{ $item->created_at->format('Y-m-d H:i:s') }}</p></td>
                                         <td class="col-aksi">
-                                            <a href="{{ route('log_quiz.show', $item->id) }}"
-                                                class="btn btn-sm btn-primary">Detail</a>
+                                            <a href="{{ route('log_quiz.show', $item->id) }}" class="btn btn-sm btn-primary">Detail</a>
                                         </td>
                                     </tr>
                                     @endforeach

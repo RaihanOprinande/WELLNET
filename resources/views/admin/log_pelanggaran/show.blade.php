@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Detail Log Quiz')
+@section('title', 'Detail Log Pelanggaran')
 
 @section('content')
 <section class="section">
@@ -11,7 +11,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="title">
-                        <h2>Detail Log Quiz</h2>
+                        <h2>Detail Log Pelanggaran</h2>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -19,10 +19,10 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
                                 <li class="breadcrumb-item">
-                                    <a href="#">Quiz & Psychoeducation</a>
+                                    <a href="#">Monitoring</a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('log_quiz.index') }}">Log Quiz</a>
+                                    <a href="{{ route('log_pelanggaran.index') }}">Log Pelanggaran</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">Detail</li>
                             </ol>
@@ -35,7 +35,7 @@
         {{-- Card Detail --}}
         <div class="card-style mb-30">
             <div class="title mb-3">
-                <h6>Informasi Detail Log Quiz</h6>
+                <h6>Informasi Detail Log Pelanggaran</h6>
             </div>
 
             <div class="row">
@@ -43,57 +43,56 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Username / Nama Anak:</label>
                     <p class="text-dark">
-                        @if ($log_quiz->setting && $log_quiz->setting->child)
-                            {{ $log_quiz->setting->child->nama_anak }}
-                        @elseif ($log_quiz->setting && $log_quiz->setting->user)
-                            {{ $log_quiz->setting->user->username }}
+                        @if ($log->setting && $log->setting->child)
+                            {{ $log->setting->child->nama_anak }}
+                        @elseif ($log->setting && $log->setting->user)
+                            {{ $log->setting->user->username }}
                         @else
                             -
                         @endif
                     </p>
                 </div>
 
-                {{-- Tema --}}
+                {{-- Jenis --}}
                 <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Tema Quiz:</label>
-                    <p class="text-dark">{{ $log_quiz->tema->title ?? '-' }}</p>
+                    <label class="form-label fw-bold">Jenis:</label>
+                    <p class="text-dark">
+                        @if ($log->setting && $log->setting->child_id)
+                            Anak
+                        @else
+                            Personal
+                        @endif
+                    </p>
                 </div>
 
-                {{-- Week --}}
+                {{-- Jenis Pelanggaran --}}
                 <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Week:</label>
-                    <p class="text-dark">{{ $log_quiz->tema->week ?? '-' }}</p>
+                    <label class="form-label fw-bold">Jenis Pelanggaran:</label>
+                    <p class="text-dark">{{ $log->pelanggaran ?? '-' }}</p>
                 </div>
 
-                {{-- Waktu --}}
+                {{-- Waktu Kejadian --}}
                 <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Waktu Pengerjaan:</label>
-                    <p class="text-dark">{{ $log_quiz->created_at->format('Y-m-d H:i:s') }}</p>
+                    <label class="form-label fw-bold">Waktu Kejadian:</label>
+                    <p class="text-dark">{{ $log->created_at ? $log->created_at->format('Y-m-d H:i:s') : '-' }}</p>
                 </div>
 
-                {{-- Pertanyaan --}}
-                <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold">Pertanyaan:</label>
+                {{-- Pelanggaran Detail --}}
+                {{-- <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Deskripsi Pelanggaran:</label>
                     <div class="border rounded p-3 bg-light">
-                        {!! $log_quiz->soal->pertanyaan ?? '-' !!}
+                        <p class="mb-0">{{ $log->pelanggaran ?? 'Tidak ada deskripsi.' }}</p>
                     </div>
-                </div>
-
-                {{-- Jawaban User --}}
-                <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold">Jawaban User:</label>
-                    <div class="border rounded p-3 bg-light">
-                        <p class="mb-0">{{ $log_quiz->jawaban_user ?? '-' }}</p>
-                    </div>
-                </div>
+                </div> --}}
             </div>
 
             <div class="mt-4">
-                <a href="{{ route('log_quiz.index') }}" class="btn btn-secondary">
+                <a href="{{ route('log_pelanggaran.index') }}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Kembali
                 </a>
             </div>
         </div>
+
     </div>
 </section>
 @endsection
