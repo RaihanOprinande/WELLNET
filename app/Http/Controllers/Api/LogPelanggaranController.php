@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\LogQuiz;
+use App\Models\LogPelanggaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class LogQuizController extends Controller
+class LogPelanggaranController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = LogQuiz::with('setting','tema','soal')->get();
+        $data = LogPelanggaran::with('setting')->get();
 
         return response()->json([
             'status' => 'success',
@@ -28,13 +28,12 @@ class LogQuizController extends Controller
      */
     public function store(Request $request)
     {
-         $data = new LogQuiz;
+                 $data = new LogPelanggaran;
 
         $rules =[
-            'setting_id' => 'required|integer|exists:user_setting,id', // Tambahkan validasi exists untuk keamanan
-            'temaquiz_id' => 'required|integer|exists:tema_quiz,id', // Sesuaikan nama tabel
-            'soalquiz_id' => 'required|integer|exists:soal_quiz,id', // Sesuaikan nama tabel
-            'jawaban_user' => 'required|string',
+            'setting_id' => 'required|integer|exists:user_setting,id',
+            'pelanggaran' => 'required|string'
+
 
         ];
         $validator = Validator::make($request->all(),$rules);
@@ -47,10 +46,8 @@ class LogQuizController extends Controller
             ],400);
         }
 
-        $data->setting_id =$request->setting_id;
-        $data->temaquiz_id = $request->temaquiz_id;
-        $data->soalquiz_id = $request->soalquiz_id;
-        $data->jawaban_user = $request->jawaban_user;
+        $data->setting_id = $request->setting_id;
+        $data->pelanggaran = $request->pelanggaran;
 
 
         $post = $data->save();
@@ -67,7 +64,7 @@ class LogQuizController extends Controller
      */
     public function show(string $id)
     {
-        $data = LogQuiz::find($id);
+        $data = LogPelanggaran::find($id);
 
         if (!$data) {
             return response()->json([
@@ -84,8 +81,9 @@ class LogQuizController extends Controller
         ],200);
     }
 
-    public function showuser(string $id){
-        $data = LogQuiz::with('user')->where("user_id",$id)->get();
+        public function showuser(string $id){
+
+        $data = LogPelanggaran::with('setting')->where("setting_id",$id)->get();
 
         if (!$data) {
             return response()->json([

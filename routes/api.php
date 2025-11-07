@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\LogPelanggaranController;
 use App\Http\Controllers\Api\LogQuizController;
 use App\Http\Controllers\Api\OpsiQuizController;
 use App\Http\Controllers\Api\PsychoeducationController;
@@ -50,9 +51,19 @@ Route::get('opsi_quiz/quiz/{id}',[OpsiQuizController::class,'showcustom']);
 // API LOG QUIZ
 
 Route::get('log_quiz',[LogQuizController::class,'index']);
-Route::get('log_quiz/store',[LogQuizController::class,'store']);
+Route::post('log_quiz/store',[LogQuizController::class,'store']);
 Route::get('log_quiz/{id}',[LogQuizController::class,'show']);
 Route::get('log_quiz/user/{id}',[LogQuizController::class,'showuser']);
+
+
+// END API LOG QUIZ
+
+// API LOG QUIZ
+
+Route::get('log_pelanggaran',[LogPelanggaranController::class,'index']);
+Route::post('log_pelanggaran/store',[LogPelanggaranController::class,'store']);
+Route::get('log_pelanggaran/{id}',[LogPelanggaranController::class,'show']);
+Route::get('log_pelanggaran/user/{id}',[LogPelanggaranController::class,'showuser']);
 
 
 // END API LOG QUIZ
@@ -61,10 +72,12 @@ Route::get('log_quiz/user/{id}',[LogQuizController::class,'showuser']);
 
 Route::post('login',[LoginController::class,'store']);
 
+
 // END API LOGIN
 
 // API REGISTER
 
 Route::post('register',[RegisterController::class,'store']);
+
 
 // END API REGISTER
