@@ -16,11 +16,5 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->count(30)->create();
-
-
-
-        $this->call(LogQuizSeeder::class);
-
     }
 }

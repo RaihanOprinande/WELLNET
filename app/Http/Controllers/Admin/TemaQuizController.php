@@ -94,6 +94,11 @@ class TemaQuizController extends Controller
     ]);
 }
 
+    public function show(TemaQuiz $tema_quiz)
+    {
+        return view('admin.tema_quiz.show', compact('tema_quiz'));
+    }
+
     public function destroy($id)
     {
         $tema = TemaQuiz::findOrFail($id);

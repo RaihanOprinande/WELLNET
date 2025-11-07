@@ -44,8 +44,10 @@ class UserSettingController extends Controller
             'skor' => 'nullable|integer|min:0',
             'lencana' => 'nullable|in:Seedling,Sprout,Explorer,Trailblazer,Mountaineer,Skywalker,Digital Sage',
             'downtime' => 'nullable|integer|min:0',
-            'sleep_schedule' => 'nullable|date_format:H:i',
-            'digital_freetime' => 'nullable|date_format:H:i',
+            'sleep_schedule_start' => 'nullable|date_format:H:i',
+            'sleep_schedule_end' => 'nullable|date_format:H:i',
+            'digital_freetime_start' => 'nullable|date_format:H:i',
+            'digital_freetime_end' => 'nullable|date_format:H:i',
         ]);
 
         // Simpan data
@@ -57,8 +59,10 @@ class UserSettingController extends Controller
             'skor' => $request->skor,
             'lencana' => $request->lencana,
             'downtime' => $request->downtime,
-            'sleep_schedule' => $request->sleep_schedule,
-            'digital_freetime' => $request->digital_freetime,
+            'sleep_schedule_start' => $request->sleep_schedule_start,
+            'sleep_schedule_end' => $request->sleep_schedule_end,
+            'digital_freetime_start' => $request->digital_freetime_start,
+            'digital_freetime_end' => $request->digital_freetime_end,
         ]);
 
         return redirect()->route('user_setting.index')->with('success', 'User setting berhasil ditambahkan!');
@@ -75,6 +79,24 @@ class UserSettingController extends Controller
 
 public function update(Request $request, UserSetting $user_setting)
 {
+    $input = $request->all();
+
+    // Ubah input kosong menjadi null
+    $timeFields = [
+        'sleep_schedule_start',
+        'sleep_schedule_end',
+        'digital_freetime_start',
+        'digital_freetime_end'
+    ];
+    foreach ($timeFields as $field) {
+        if (empty($input[$field])) {
+            $input[$field] = null;
+        } else {
+            // pastikan format HH:MM (2 digit jam)
+            $input[$field] = date('H:i', strtotime($input[$field]));
+        }
+    }
+
     $validated = $request->validate([
         'user_id' => 'required|exists:users,id',
         'child_id' => 'nullable|exists:user_children,id',
@@ -83,24 +105,22 @@ public function update(Request $request, UserSetting $user_setting)
         'skor' => 'nullable|integer|min:0',
         'lencana' => 'nullable|in:Seedling,Sprout,Explorer,Trailblazer,Mountaineer,Skywalker,Digital Sage',
         'downtime' => 'nullable|integer|min:0',
-        'sleep_schedule' => 'nullable|date_format:H:i',
-        'digital_freetime' => 'nullable|date_format:H:i',
+        'sleep_schedule_start' => 'nullable',
+        'sleep_schedule_end' => 'nullable',
+        'digital_freetime_start' => 'nullable',
+        'digital_freetime_end' => 'nullable',
     ]);
 
-    $user_setting->update($validated);
+    $user_setting->update($input);
 
-    return redirect()
-        ->route('user_setting.index')
-        ->with('success', 'User setting berhasil diperbarui!');
+    return redirect()->route('user_setting.index')->with('success', 'User setting berhasil diperbarui!');
 }
 
 
     public function show(UserSetting $user_setting)
     {
-        // Menampilkan detail user setting
-
+        $user_setting->load(['user', 'child']); // eager load relasi
         return view('admin.user_setting.show', compact('user_setting'));
-
     }
 
     // ------------------- DESTROY -------------------

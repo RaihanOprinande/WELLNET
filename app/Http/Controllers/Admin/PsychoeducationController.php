@@ -25,6 +25,7 @@ class PsychoeducationController extends Controller
 
     public function store(Request $request)
     {
+        
         try {
             $request->validate([
                 'title' => 'required|string|max:255',

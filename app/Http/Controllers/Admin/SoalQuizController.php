@@ -23,79 +23,78 @@ class SoalQuizController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'temaquiz_id' => 'required',
-        'pertanyaan' => 'required',
-        'opsi' => 'required|array|min:2',
-        'jawaban_benar' => 'required' // ini akan berisi index radio yang dipilih
-    ]);
+    {
+        $request->validate([
+            'temaquiz_id' => 'required',
+            'pertanyaan' => 'required',
+            'opsi' => 'required|array|min:2',
+            'jawaban_benar' => 'required'
+        ]);
 
-    // Simpan soal terlebih dahulu
-    $soal = SoalQuiz::create([
-        'temaquiz_id' => $request->temaquiz_id,
-        'pertanyaan' => $request->pertanyaan,
-        // jawaban benar diisi nanti berdasarkan opsi
-        'jawaban_benar' => $request->opsi[$request->jawaban_benar],
-    ]);
+        $soal = SoalQuiz::create([
+            'temaquiz_id' => $request->temaquiz_id,
+            'pertanyaan' => $request->pertanyaan,
+            'jawaban_benar' => $request->opsi[$request->jawaban_benar],
+        ]);
 
-    // Simpan semua opsi
-    foreach ($request->opsi as $index => $opsiText) {
-        OpsiSoal::create([
-            'soalquiz_id' => $soal->id,
-            'opsi' => $opsiText,
-            'is_correct' => $index == $request->jawaban_benar ? 1 : 0,
+        foreach ($request->opsi as $index => $opsiText) {
+            OpsiSoal::create([
+                'soalquiz_id' => $soal->id,
+                'opsi' => $opsiText,
+                'is_correct' => $index == $request->jawaban_benar ? 1 : 0,
+            ]);
+        }
+
+        // Flash session untuk modal sukses
+        return redirect()->route('soal_quiz.index')->with([
+            'status' => 'success_modal',
+            'message' => 'Soal quiz berhasil ditambahkan!',
         ]);
     }
-
-    return redirect()->route('soal_quiz.index')
-        ->with('success', 'Soal quiz berhasil ditambahkan!');
-}
-
 
     public function edit($id)
     {
         $soal_quiz = SoalQuiz::findOrFail($id);
-        $tema_quiz = TemaQuiz::all();
+        $tema_quiz = TemaQuiz::orderBy('week', 'asc')->get();
 
         return view('admin.soal_quiz.edit', compact('soal_quiz', 'tema_quiz'));
     }
 
-
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'temaquiz_id' => 'required',
-        'pertanyaan' => 'required',
-        'opsi' => 'required|array|min:2',
-        'jawaban_benar' => 'required'
-    ]);
+    {
+        $request->validate([
+            'temaquiz_id' => 'required',
+            'pertanyaan' => 'required',
+            'opsi' => 'required|array|min:2',
+            'jawaban_benar' => 'required'
+        ]);
 
-    // Ambil soal yang mau diupdate
-    $soal = SoalQuiz::findOrFail($id);
+        $soal = SoalQuiz::findOrFail($id);
 
-    // Update data soal
-    $soal->update([
-        'temaquiz_id' => $request->temaquiz_id,
-        'pertanyaan' => $request->pertanyaan,
-        'jawaban_benar' => $request->opsi[$request->jawaban_benar] ?? null,
-    ]);
+        $soal->update([
+            'temaquiz_id' => $request->temaquiz_id,
+            'pertanyaan' => $request->pertanyaan,
+            'jawaban_benar' => $request->opsi[$request->jawaban_benar] ?? null,
+        ]);
 
-    // Hapus opsi lama dulu
-    $soal->opsi()->delete();
+        // Hapus opsi lama
+        $soal->opsi()->delete();
 
-    // Simpan ulang opsi baru
-    foreach ($request->opsi as $index => $opsiText) {
-        OpsiSoal::create([
-            'soalquiz_id' => $soal->id,
-            'opsi' => $opsiText,
-            'is_correct' => ($index == $request->jawaban_benar) ? 1 : 0,
+        // Simpan ulang opsi baru
+        foreach ($request->opsi as $index => $opsiText) {
+            OpsiSoal::create([
+                'soalquiz_id' => $soal->id,
+                'opsi' => $opsiText,
+                'is_correct' => $index == $request->jawaban_benar ? 1 : 0,
+            ]);
+        }
+
+        // Flash session untuk modal sukses
+        return redirect()->route('soal_quiz.index')->with([
+            'status' => 'success_modal',
+            'message' => 'Soal quiz berhasil diperbarui!',
         ]);
     }
-
-    return redirect()->route('soal_quiz.index')->with('success', 'Soal quiz berhasil diperbarui!');
-}
-
 
     public function show($id)
     {
@@ -103,12 +102,12 @@ class SoalQuizController extends Controller
         return view('admin.soal_quiz.show', compact('soal_quiz'));
     }
 
-
     public function destroy($id)
     {
         $soal = SoalQuiz::findOrFail($id);
         $soal->delete();
 
+        // Flash session untuk modal sukses hapus
         return redirect()->route('soal_quiz.index')->with([
             'status' => 'success_modal',
             'message' => 'Soal berhasil dihapus!',
