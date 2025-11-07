@@ -25,6 +25,7 @@
                 </div>
             </div>
         </div>
+    </section>
 
         {{-- Form --}}
         <div class="card-style mb-30 p-4">

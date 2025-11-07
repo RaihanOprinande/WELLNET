@@ -10,13 +10,17 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserChildrenController;
 use App\Http\Controllers\Admin\UserSettingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
 
 // ========================
 // 🏠 Dashboard (halaman setelah login)
 // ========================
-Route::get('/admin/dashboard', function () {
-    return view('welcome'); // nanti buat file resources/views/dashboard.blade.php
-})->name('admin.dashboard')->middleware('auth');
+// Route::get('/admin/dashboard', function () {
+//     return view('welcome'); // nanti buat file resources/views/dashboard.blade.php
+// })->name('admin.dashboard')->middleware('auth');
+
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
+
 
 
 // ========================
