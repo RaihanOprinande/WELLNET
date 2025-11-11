@@ -74,6 +74,7 @@ Route::get('log_pelanggaran/user/{id}',[LogPelanggaranController::class,'showuse
 
 // API LOGIN
 
+Route::get('google-redirect',[SocialLoginController::class,'googleredirect']);
 Route::post('login',[SocialLoginController::class,'googleLogin']);
 
 

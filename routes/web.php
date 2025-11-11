@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UserChildrenController;
 use App\Http\Controllers\Admin\UserSettingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Api\SocialLoginController;
 
 // ========================
 // 🏠 Dashboard (halaman setelah login)
@@ -32,6 +33,8 @@ Route::post('/login', [AuthController::class, 'loginProcess'])->name('login.proc
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'registerProcess'])->name('register.process');
+Route::get('auth/google-redirect',[SocialLoginController::class,'googleredirect']);
+Route::get('auth/google-callback',[SocialLoginController::class,'googleLogin']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
