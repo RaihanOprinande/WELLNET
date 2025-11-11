@@ -59,7 +59,7 @@ class SocialLoginController extends Controller
                 'password' => Hash::make(Str::random(32)),
                 'role' => $roleDefault,
                 'google_id' => $socialUser->getId(),
-                'email_verified_at' => now(), 
+                'email_verified_at' => now(),
             ]);
         }
 
@@ -69,6 +69,7 @@ class SocialLoginController extends Controller
 
         // --- 3. Redirect Akhir ke Deep Link Aplikasi Mobile ---
         // Sertakan Token Sanctum dan ID User di Deep Link
+        Auth::login($user);
         return redirect('/admin/dashboard');
     }
 }
