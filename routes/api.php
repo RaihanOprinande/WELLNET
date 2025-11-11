@@ -7,7 +7,9 @@ use App\Http\Controllers\Api\OpsiQuizController;
 use App\Http\Controllers\Api\PsychoeducationController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\SoalQuizController;
+use App\Http\Controllers\Api\SocialLoginController;
 use App\Http\Controllers\Api\TemaQuizController;
+use App\Http\Controllers\Api\UserSettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,12 +24,14 @@ Route::post('TemaQuiz',[TemaQuizController::class,'store']);
 Route::put('TemaQuiz/{id}',[TemaQuizController::class,'update']);
 Route::delete('TemaQuiz/{id}',[TemaQuizController::class,'destroy']);
 
+
 // END API TEMA QUIZ
 
 // API PSYCOEDUCATION
 
 Route::get('psycoedu',[PsychoeducationController::class,'index']);
 Route::get('psycoedu/{id}',[PsychoeducationController::class,'show']);
+
 
 // END API PSYCOEDUCATION
 
@@ -70,7 +74,7 @@ Route::get('log_pelanggaran/user/{id}',[LogPelanggaranController::class,'showuse
 
 // API LOGIN
 
-Route::post('login',[LoginController::class,'store']);
+Route::post('login',[SocialLoginController::class,'googleLogin']);
 
 
 // END API LOGIN
@@ -81,3 +85,14 @@ Route::post('register',[RegisterController::class,'store']);
 
 
 // END API REGISTER
+
+// API USER SETTING
+
+Route::get('usersetting',[UserSettingController::class,'index']);
+Route::get('usersetting/{id}',[UserSettingController::class,'show']);
+Route::post('usersetting/store',[UserSettingController::class,'store']);
+Route::put('usersetting/update/{id}',[UserSettingController::class,'update']);
+
+
+// END API USER SETTING
+
