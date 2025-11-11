@@ -20,6 +20,21 @@ class LoginController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    protected function getAbilities(string $role): array
+    {
+        // Mendefinisikan izin token berdasarkan role
+        if ($role === 'super admin' || $role === 'admin') {
+            // Admin tidak boleh login via API mobile.
+            return ['blocked'];
+        } elseif ($role === 'parent') {
+            return ['read:own', 'update:own', 'create:child', 'read:child-setting'];
+        } elseif ($role === 'child') {
+             return ['read:content', 'create:log', 'update:progress'];
+        } else {
+            return ['read:public'];
+        }
+    }
+
 public function store(Request $request)
     {
         // 1. Validasi Input
