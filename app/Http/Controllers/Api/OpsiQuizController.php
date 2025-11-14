@@ -20,7 +20,7 @@ class OpsiQuizController extends Controller
     }
 
     public function show(string $id){
-        $data = OpsiSoal::find($id);
+        $data = OpsiSoal::with('soal')->find($id);
 
         if(!$data){
             return response()->json([
@@ -37,7 +37,7 @@ class OpsiQuizController extends Controller
     }
 
     public function showcustom(string $id){
-        $data = OpsiSoal::where('soalquiz_id',$id)->get();
+        $data = OpsiSoal::with('soal')->where('soalquiz_id',$id)->get();
 
         if($data->isEmpty()){
             return response()->json([

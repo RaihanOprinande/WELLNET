@@ -35,7 +35,7 @@ class SoalQuizController extends Controller
      */
     public function show(string $id)
     {
-        $data = SoalQuiz::with('tema')->find($id);
+        $data = SoalQuiz::with('tema')->where('temaquiz_id',$id)->get();
 
         if (!$data) {
             return response()->json([
