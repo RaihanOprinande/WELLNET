@@ -73,7 +73,7 @@ class UserSettingController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Data berhasil ditambahkan',
-            // 'data' => $data
+            'data' => $data
         ],201);
     }
 

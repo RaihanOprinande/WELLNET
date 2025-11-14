@@ -20,7 +20,8 @@ Route::get('/user', function (Request $request) {
 // API TEMA QUIZ CRUD
 
 Route::get('TemaQuiz/{id}',[TemaQuizController::class,'show']);
-Route::post('TemaQuiz',[TemaQuizController::class,'store']);
+Route::get('TemaQuiz',[TemaQuizController::class,'index']);
+Route::post('TemaQuiz/store',[TemaQuizController::class,'store']);
 Route::put('TemaQuiz/{id}',[TemaQuizController::class,'update']);
 Route::delete('TemaQuiz/{id}',[TemaQuizController::class,'destroy']);
 

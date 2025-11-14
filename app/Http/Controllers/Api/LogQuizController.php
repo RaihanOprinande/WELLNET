@@ -31,9 +31,9 @@ class LogQuizController extends Controller
          $data = new LogQuiz;
 
         $rules =[
-            'setting_id' => 'required|integer|exists:user_setting,id', // Tambahkan validasi exists untuk keamanan
-            'temaquiz_id' => 'required|integer|exists:tema_quiz,id', // Sesuaikan nama tabel
-            'soalquiz_id' => 'required|integer|exists:soal_quiz,id', // Sesuaikan nama tabel
+            'setting_id' => 'required|integer|exists:user_setting,id',
+            'temaquiz_id' => 'required|integer|exists:tema_quiz,id',
+            'soalquiz_id' => 'required|integer|exists:soal_quiz,id',
             'jawaban_user' => 'required|string',
 
         ];
