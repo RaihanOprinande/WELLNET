@@ -84,6 +84,8 @@ Route::post('login',[SocialLoginController::class,'googleLogin']);
 // API REGISTER
 
 Route::post('register',[RegisterController::class,'store']);
+Route::post('register/children',[RegisterController::class,'child']);
+
 
 
 // END API REGISTER

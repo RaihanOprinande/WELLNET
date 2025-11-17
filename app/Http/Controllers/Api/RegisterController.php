@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserChildren;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,8 +29,8 @@ class RegisterController extends Controller
     {
         // 1. Validasi Input (Dilakukan di luar try-catch karena ini harus gagal cepat)
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users', // Email harus unik
+            'username' => 'required|string|max:90',
+            'email' => 'required|string|email|max:90|unique:users', // Email harus unik
             'password' => 'required|string|confirmed', // Pastikan ada field password_confirmation
             'role' => 'required|in:personal,parent', // Batasi role yang boleh didaftarkan
             // ... aturan validasi ...
@@ -99,5 +100,44 @@ class RegisterController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function child(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'parent_id' => 'required|integer|exists:users,id',
+            'username' => 'required|string|max:90',
+            'email' => 'required|string|email|max:90|unique:users',
+            'profile' => 'nullable|string',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+        try {
+            $child = UserChildren::create([
+                'parent_id' => $request->parent_id,
+                'username' => $request->username,
+                'email' => $request->email,
+                'profile' => $request->profile,
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'messages' => 'Berhasil menambahkan akun anak',
+            'data' => $child,
+        ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+            'success' => false,
+            'messages' => 'gagal menambahkan akun anak'.$e->getMessage(),
+            // 'data' => $child,
+        ]);
+        }
+
+
+
     }
 }
