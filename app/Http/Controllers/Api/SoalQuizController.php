@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SoalQuizResource;
 use App\Models\SoalQuiz;
 use Illuminate\Http\Request;
 
 class SoalQuizController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display all soal quiz.
      */
     public function index()
     {
@@ -18,52 +19,32 @@ class SoalQuizController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Data berhasil ditampilkan',
-            'data' => $data
+            'data' => SoalQuizResource::collection($data)
         ], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display list soal based on temaquiz_id.
      */
-    public function store(Request $request)
+    public function show($temaId)
     {
-        //
-    }
+        $data = SoalQuiz::with('tema')
+            ->where('temaquiz_id', $temaId)
+            ->get();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $data = SoalQuiz::with('tema')->where('temaquiz_id',$id)->get();
-
-        if (!$data) {
+        // ✔ Perbaikan: cek apakah data kosong
+        if ($data->isEmpty()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Data tidak ditemukan'
+                'message' => 'Tidak ada soal untuk tema ini',
+                'data' => []
             ], 404);
         }
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data berhasil ditampilkan',
-            'data' => $data
+            'data' => SoalQuizResource::collection($data)
         ], 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

@@ -70,6 +70,6 @@ class SocialLoginController extends Controller
         // --- 3. Redirect Akhir ke Deep Link Aplikasi Mobile ---
         // Sertakan Token Sanctum dan ID User di Deep Link
         Auth::login($user);
-        return redirect('/admin/dashboard');
+        return redirect()->away("wellnet://auth-success?token={$token}&user_id={$user->id}");
     }
 }

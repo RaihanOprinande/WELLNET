@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PsychoeducationResource;
 use App\Models\Psychoeducation;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class PsychoeducationController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Data berhasil ditampilkan',
-            'data' => $data
+            'data' => PsychoeducationResource::collection($data)
         ],200);
     }
 
@@ -40,7 +41,7 @@ class PsychoeducationController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Data berhasil ditampilkan',
-                'data' => $data
+                'data' => PsychoeducationResource::collection($data)
             ],200);
         } else {
             return response()->json([
