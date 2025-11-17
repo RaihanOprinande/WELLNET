@@ -16,6 +16,7 @@ class Psychoeducation extends Model
 
     protected $fillable = [
         'title',
+        'topik',
         'image',
         'link_yt',
         'content',

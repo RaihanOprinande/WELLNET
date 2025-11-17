@@ -32,11 +32,32 @@
 
             {{-- Gambar Sampul --}}
             <div class="text-center mb-4">
-                <img src="{{ $tema_quiz->image ? asset('storage/' . $tema_quiz->image) : asset('images/default-image.png') }}"
-                     alt="Gambar Tema Quiz"
-                     class="rounded shadow-sm"
-                     style="width: 200px; height: 200px; object-fit: cover;">
-            </div>
+    @php
+        $defaultImage = asset('images/default-image.png');
+
+        if ($tema_quiz->image) {
+            // Cek di storage/app/public
+            $storagePath = 'storage/' . $tema_quiz->image;
+            $publicFilePath = public_path($storagePath);
+
+            if (file_exists($publicFilePath)) {
+                // file ada di storage
+                $imgUrl = asset($storagePath);
+            } else {
+                // file dicoba ambil dari public/
+                $imgUrl = asset($tema_quiz->image);
+            }
+        } else {
+            $imgUrl = $defaultImage;
+        }
+    @endphp
+
+    <img src="{{ $imgUrl }}"
+         alt="Gambar Tema Quiz"
+         class="rounded shadow-sm"
+         style="width: 200px; height: 200px; object-fit: cover;">
+</div>
+
 
             {{-- Informasi --}}
             <div class="row">
