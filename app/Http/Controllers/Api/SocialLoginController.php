@@ -35,41 +35,59 @@ class SocialLoginController extends Controller
     }
 
     public function googleLogin(Request $request)
-    {
-        try {
-            // Ambil user dari Socialite (stateless)
-            $socialUser = Socialite::driver('google')->user();
-        } catch (\Exception $e) {
-            // Jika otentikasi gagal (e.g., user membatalkan), redirect ke Deep Link error
-            return redirect('admin/dashboard');
-        }
+{
+    try {
+        // WAJIB: Menggunakan stateless() sesuai dokumentasi
+        /** @var \Laravel\Socialite\Two\AbstractProvider $driver */
+        $socialUser = Socialite::driver('google')->stateless()->user();
+    } catch (Exception $e) {
+        Log::error("Socialite Callback Failed: " . $e->getMessage());
+        // Jika gagal otentikasi, redirect ke Deep Link error aplikasi mobile
+        // return redirect()->away("wellnet://auth-failure?message=Otentikasi%20dibatalkan");
+    return response()->json([
+        'status' => false,
+        'message' => 'Otentikasi gagal'.$e->getMessage(),
+        // 'data' => [
+        //     'token' => $token,
+        //     'user_id' => $user->id,
+        // ]
+    ]);
 
-        // --- 1. Cari atau Buat User ---
-        $user = User::where('google_id', $socialUser->getId())
+    }
+
+    // --- 1. Cari atau Buat User ---
+    $user = User::where('google_id', $socialUser->getId())
                     ->orWhere('email', $socialUser->getEmail())
                     ->first();
 
-        $roleDefault = 'parent'; // Role default untuk yang login sosial
+    $roleDefault = 'parent';
 
-        if (!$user) {
-            // Registrasi User Baru
-            $user = User::create([
-                'username' => $socialUser->getName() ?? 'User Baru',
-                'email' => $socialUser->getEmail(),
-                'password' => Hash::make(Str::random(32)),
-                'role' => $roleDefault,
-                'google_id' => $socialUser->getId(),
-                'email_verified_at' => now(),
-            ]);
-        }
-
-        // --- 2. Buat Token Sanctum ---
-        $abilities = $this->getAbilities($user->role);
-        $token = $user->createToken('social-session', $abilities)->plainTextToken;
-
-        // --- 3. Redirect Akhir ke Deep Link Aplikasi Mobile ---
-        // Sertakan Token Sanctum dan ID User di Deep Link
-        Auth::login($user);
-        return redirect()->away("wellnet://auth-success?token={$token}&user_id={$user->id}");
+    if (!$user) {
+        $user = User::create([
+            'username' => $socialUser->getName() ?? 'User Baru', // Pastikan field ini ada
+            'email' => $socialUser->getEmail(),
+            'password' => Hash::make(Str::random(32)),
+            'role' => $roleDefault,
+            'google_id' => $socialUser->getId(),
+            'email_verified_at' => now(),
+        ]);
     }
+
+    // --- 2. Buat Token Sanctum ---
+    // (Asumsi $this->getAbilities() didefinisikan)
+    $abilities = $this->getAbilities($user->role);
+    $token = $user->createToken('social-session', $abilities)->plainTextToken;
+
+    // --- 3. Redirect Akhir ke Deep Link Aplikasi Mobile ---
+    // Menggunakan redirect()->away() adalah benar untuk URL eksternal/schemes kustom
+    // return redirect()->away("wellnet://auth-success?token={$token}&user_id={$user->id}");
+    return response()->json([
+        'status' => true,
+        'message' => 'Otentikasi berhasil',
+        'data' => [
+            'token' => $token,
+            'user_id' => $user->id,
+        ]
+    ]);
+}
 }
