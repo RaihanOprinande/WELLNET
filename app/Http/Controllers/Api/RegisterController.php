@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ChildVerificationEmail;
 use App\Models\User;
 use App\Models\UserChildren;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -103,7 +107,7 @@ class RegisterController extends Controller
     }
 
     public function child(Request $request){
-
+        DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'parent_id' => 'required|integer|exists:users,id',
             'username' => 'required|string|max:90',
@@ -116,12 +120,17 @@ class RegisterController extends Controller
             return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
         try {
+
             $child = UserChildren::create([
                 'parent_id' => $request->parent_id,
                 'username' => $request->username,
                 'email' => $request->email,
                 'profile' => $request->profile,
             ]);
+        $verificationUrl = URL::temporarySignedRoute('child.verify.deep_link', now()->addMinutes(60), ['id' => $child->id, 'hash' => sha1($child->email)]);
+        
+        Mail::to($child->email)->send(new ChildVerificationEmail($child, $verificationUrl));
+        DB::commit();
 
         return response()->json([
             'success' => true,
@@ -130,6 +139,7 @@ class RegisterController extends Controller
         ]);
 
         } catch (Exception $e) {
+        DB::rollBack();
             return response()->json([
             'success' => false,
             'messages' => 'gagal menambahkan akun anak'.$e->getMessage(),
