@@ -18,8 +18,9 @@ class PsychoeducationResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'image' => $this->image,
-            'link_yt' => $this->link_yr,
+            'link_yt' => $this->link_yt,
             'content' => strip_tags($this->content),
+            'topik' => $this->topik,
         ];
     }
 }

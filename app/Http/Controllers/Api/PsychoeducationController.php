@@ -41,8 +41,9 @@ class PsychoeducationController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Data berhasil ditampilkan',
-                'data' => PsychoeducationResource::collection($data)
+                'data' => new PsychoeducationResource($data)
             ],200);
+
         } else {
             return response()->json([
                 'status' => false,
