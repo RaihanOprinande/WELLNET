@@ -32,12 +32,30 @@
             <div class="row mb-4">
                 <div class="col-12 text-center">
                     @if ($psychoeducation->image)
-                        <img src="{{ asset('storage/' . $psychoeducation->image) }}"
-                             alt="Gambar Psychoeducation"
-                             class="rounded shadow" style="max-width: 400px;">
-                    @else
-                        <span class="text-muted">Tidak ada gambar</span>
-                    @endif
+    @php
+        // Cek apakah file ada di storage/app/public
+        $storagePath = 'storage/' . $psychoeducation->image;
+        $publicFilePath = public_path($storagePath);
+
+        if (file_exists($publicFilePath)) {
+            // Jika file berada di storage
+            $imgUrl = asset($storagePath);
+        } else {
+            // Jika file berada langsung di public/
+            $imgUrl = asset($psychoeducation->image);
+        }
+    @endphp
+
+    <img src="{{ $imgUrl }}"
+         alt="Gambar Psychoeducation"
+         class="rounded shadow"
+         style="max-width: 400px;">
+@else
+    <span class="text-muted">Tidak ada gambar</span>
+@endif
+
+
+
                 </div>
             </div>
 
@@ -45,6 +63,7 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <h4>{{ $psychoeducation->title }}</h4>
+                    <a>{{ $psychoeducation->topik }}</a>
                     @if ($psychoeducation->link_yt)
                         <p class="mt-2">
                             <strong>Link YouTube:</strong>

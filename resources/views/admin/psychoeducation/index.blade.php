@@ -60,7 +60,7 @@
                                                 <h6>Judul</h6>
                                             </th>
                                             <th>
-                                                <h6>Link YouTube</h6>
+                                                <h6>Sub-Judul</h6>
                                             </th>
                                             <th>
                                                 <h6>Aksi</h6>
@@ -74,9 +74,25 @@
                                                     <h6>{{ $loop->iteration }}</h6>
                                                 </td>
                                                 <td>
+
+
                                                     @if ($item->image)
-                                                        <img src="{{ asset('storage/' . $item->image) }}" width="70"
-                                                            class="rounded" alt="gambar">
+                                                        @php
+                                                            // Cek apakah file ada di storage/app/public
+                                                            $storagePath = 'storage/' . $item->image;
+                                                            $publicFilePath = public_path($storagePath);
+
+                                                            // Jika file ada di storage
+                                                            if (file_exists($publicFilePath)) {
+                                                                $imgUrl = asset($storagePath);
+                                                            } else {
+                                                                // Jika file ada di public
+                                                                $imgUrl = asset($item->image);
+                                                            }
+                                                        @endphp
+
+                                                        <img src="{{ $imgUrl }}" width="70" class="rounded" alt="gambar">
+
                                                     @else
                                                         <span class="text-muted">Tidak ada</span>
                                                     @endif
@@ -85,6 +101,9 @@
                                                     <p>{{ $item->summary }}</p>
                                                 </td>
                                                 <td>
+                                                    <p>{{ $item->topik }}</p>
+                                                </td>
+                                                {{-- <td>
                                                     @if ($item->link_yt)
                                                         <a href="{{ $item->link_yt }}" target="_blank"
                                                             class="text-truncate d-block mb-2" style="max-width: 250px;">
@@ -93,7 +112,7 @@
                                                     @else
                                                         <span class="text-muted">-</span>
                                                     @endif
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     {{-- Tombol Show --}}
                                                     <a href="{{ route('psychoeducation.show', $item->id) }}"

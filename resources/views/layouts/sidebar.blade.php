@@ -7,12 +7,14 @@
 
 <aside class="sidebar-nav-wrapper">
     <div class="navbar-logo">
-        <a href="{{ url('/admin/dashboard') }}" class="d-flex align-items-center text-decoration-none">
-            <img src="{{ asset('assets/images/logo/logo-wellnet.svg') }}" alt="Logo kiri"
-                 class="img-fluid me-2" style="max-height: 45px; width: auto;" />
-            <span class="fw-bold text-dark fs-4">WELLNET</span>
-        </a>
-    </div>
+    <a href="{{ url('/admin/dashboard') }}" class="d-flex align-items-center text-decoration-none">
+        <img src="{{ asset('assets/images/logo/logowellnet.png') }}"
+             alt="Logo Wellnet"
+             class="img-fluid"
+             style="max-height: auto; width: auto;">
+    </a>
+</div>
+
 
     <nav class="sidebar-nav">
         <ul>

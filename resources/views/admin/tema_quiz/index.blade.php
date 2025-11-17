@@ -89,8 +89,22 @@
                                                 </td>
                                                 <td>
                                                     @if ($item->image)
-                                                        <img src="{{ asset('storage/' . $item->image) }}" width="70"
-                                                            class="rounded" alt="gambar">
+                                                        @php
+                                                            // Cek apakah file ada di storage/app/public
+                                                            $storagePath = 'storage/' . $item->image;
+                                                            $publicFilePath = public_path($storagePath);
+
+                                                            // Jika file ada di storage
+                                                            if (file_exists($publicFilePath)) {
+                                                                $imgUrl = asset($storagePath);
+                                                            } else {
+                                                                // Jika file ada di public
+                                                                $imgUrl = asset($item->image);
+                                                            }
+                                                        @endphp
+
+                                                        <img src="{{ $imgUrl }}" width="70" class="rounded" alt="gambar">
+
                                                     @else
                                                         <span class="text-muted">Tidak ada</span>
                                                     @endif
