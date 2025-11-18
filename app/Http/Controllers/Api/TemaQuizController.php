@@ -18,7 +18,7 @@ class TemaQuizController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Data berhasil ditampilkan',
-            'id' => $data
+            'data' => $data
         ],200);
     }
 
