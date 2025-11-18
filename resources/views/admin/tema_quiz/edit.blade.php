@@ -89,12 +89,28 @@
                                 <div class="col-md-6">
                                     <div class="input-style-1">
                                         <label>Gambar Sampul Saat Ini</label>
-                                        @if($tema->image)
-                                            <img src="{{ asset('storage/'.$tema->image) }}" width="150" class="rounded mb-2" alt="Gambar Sampul">
-                                            <p class="text-muted">Upload gambar baru untuk mengganti gambar di atas.</p>
-                                        @else
-                                            <p class="text-muted">Belum ada gambar sampul.</p>
-                                        @endif
+                                        @if ($tema->image)
+    @php
+        // Path file di storage
+        $storagePath = 'storage/' . $tema->image;
+        $publicFilePath = public_path($storagePath);
+
+        // Jika file ada di storage/app/public
+        if (file_exists($publicFilePath)) {
+            $imgUrl = asset($storagePath);
+        } else {
+            // Jika file ada di public/
+            $imgUrl = asset($tema->image);
+        }
+    @endphp
+
+    <img src="{{ $imgUrl }}" width="150" class="rounded mb-2" alt="Gambar Sampul">
+    <p class="text-muted">Upload gambar baru untuk mengganti gambar di atas.</p>
+
+@else
+    <p class="text-muted">Belum ada gambar sampul.</p>
+@endif
+
 
                                         <div class="update-image">
                                             <input type="file" name="image" accept="image/*">

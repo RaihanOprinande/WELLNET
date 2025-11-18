@@ -11,7 +11,7 @@ class PsychoeducationController extends Controller
 {
     public function index()
     {
-        $psychoeducation = Psychoeducation::orderBy('id', 'desc')->get();
+        $psychoeducation = Psychoeducation::orderBy('id', 'asc')->get();
 
         $title = $psychoeducation->pluck('title');
 
@@ -72,6 +72,7 @@ class PsychoeducationController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
+            'topik' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'link_yt' => 'nullable|string|max:255',
             'content' => 'required|string',
