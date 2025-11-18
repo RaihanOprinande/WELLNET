@@ -85,21 +85,25 @@ class LogQuizController extends Controller
     }
 
     public function showuser(string $id){
-        $data = LogQuiz::with('user')->where("user_id",$id)->get();
+        
+    $data = LogQuiz::with('user')->where("setting_id",$id)->get();
 
-        if (!$data) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data tidak ditemukan',
-                'data' => null
-            ],404);
-        }
+
+    // Gunakan isEmpty() untuk mengecek apakah Collection kosong
+    if ($data->isEmpty()) {
         return response()->json([
-            'status' => true,
-            'message' => 'Data berhasil ditampilkan',
-            'data' => $data
-        ],200);
+            'status' => false,
+            'message' => 'Data tidak ditemukan untuk setting ID ini.',
+            'data' => null
+        ], 404);
+    }
 
+    // Jika data ditemukan, lanjutkan
+    return response()->json([
+        'status' => true,
+        'message' => 'Data berhasil ditampilkan',
+        'data' => $data
+    ], 200);
 
     }
 

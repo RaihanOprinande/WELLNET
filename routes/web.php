@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\UserSettingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Api\SocialLoginController;
+use App\Http\Controllers\ChildVerificationController;
 
 // ========================
 // 🏠 Dashboard (halaman setelah login)
@@ -67,3 +68,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::delete('/{user_setting}', [UserSettingController::class, 'destroy'])->name('user_setting.destroy');
     });
 });
+
+Route::get('/child-verify/{id}/{hash}', [ChildVerificationController::class, 'verifyAndRedirect'])
+    ->name('child.verify.deep_link')
+    ->middleware(['signed']);

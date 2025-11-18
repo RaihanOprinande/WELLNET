@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\SoalQuizController;
 use App\Http\Controllers\Api\SocialLoginController;
 use App\Http\Controllers\Api\TemaQuizController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserSettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -76,7 +77,7 @@ Route::get('log_pelanggaran/user/{id}',[LogPelanggaranController::class,'showuse
 // API LOGIN
 
 Route::get('google-redirect',[SocialLoginController::class,'googleredirect']);
-Route::post('login',[SocialLoginController::class,'googleLogin']);
+Route::post('login',[LoginController::class,'store']);
 
 
 // END API LOGIN
@@ -85,7 +86,6 @@ Route::post('login',[SocialLoginController::class,'googleLogin']);
 
 Route::post('register',[RegisterController::class,'store']);
 Route::post('register/children',[RegisterController::class,'child']);
-
 
 
 // END API REGISTER
@@ -99,4 +99,11 @@ Route::put('usersetting/update/{id}',[UserSettingController::class,'update']);
 
 
 // END API USER SETTING
+
+// API USER
+Route::get('user',[UserController::class,'index']);
+Route::get('user/{id}',[UserController::class,'show']);
+Route::put('user/update/{id}',[UserController::class,'update']);
+
+// END API USER
 

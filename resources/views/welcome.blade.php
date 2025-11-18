@@ -92,9 +92,10 @@
                 <div class="col-12">
                     <div class="card-style mb-30">
                         <div class="chart">
-                            <canvas id="Chart2"
-                                style="width: 663px; height: 400px; margin-left: -35px; display: block; box-sizing: border-box;"
-                                width="1326" height="800"></canvas>
+                            <div>
+                                <canvas id="myChart"></canvas>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -103,5 +104,59 @@
         </div>
         <!-- end container -->
     </section>
+    <script>
+        const data = @json($chartData);
+        const label = data.map(item => item.label);
+        const pelanggaran = data.map(item => item.value);
+
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: 'Jumlah Pelanggaran',
+                    data: pelanggaran,
+                    backgroundColor: [
+                        // 'rgba(255, 99, 132, 0.5)',
+                        // 'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        // 'rgba(75, 192, 192, 0.5)',
+                        // 'rgba(153, 102, 255, 0.5)',
+                        // 'rgba(255, 159, 64, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        // 'rgba(54, 162, 235, 1)',
+                        // 'rgba(255, 206, 86, 1)',
+                        // 'rgba(75, 192, 192, 1)',
+                        // 'rgba(153, 102, 255, 1)',
+                        // 'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Jumlah Pelanggaran'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Hari'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
 @endsection
