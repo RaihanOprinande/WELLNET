@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\SoalQuizController;
 use App\Http\Controllers\Api\SocialLoginController;
 use App\Http\Controllers\Api\TemaQuizController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserSettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -87,7 +88,6 @@ Route::post('register',[RegisterController::class,'store']);
 Route::post('register/children',[RegisterController::class,'child']);
 
 
-
 // END API REGISTER
 
 // API USER SETTING
@@ -99,4 +99,11 @@ Route::put('usersetting/update/{id}',[UserSettingController::class,'update']);
 
 
 // END API USER SETTING
+
+// API USER
+Route::get('user',[UserController::class,'index']);
+Route::get('user/{id}',[UserController::class,'show']);
+Route::put('user/update/{id}',[UserController::class,'update']);
+
+// END API USER
 
