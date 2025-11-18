@@ -85,9 +85,10 @@ class LogQuizController extends Controller
     }
 
     public function showuser(string $id){
+        
     $data = LogQuiz::with('user')->where("setting_id",$id)->get();
 
-    
+
     // Gunakan isEmpty() untuk mengecek apakah Collection kosong
     if ($data->isEmpty()) {
         return response()->json([

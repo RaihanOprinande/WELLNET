@@ -25,10 +25,11 @@ class PsychoeducationController extends Controller
 
     public function store(Request $request)
     {
-        
+
         try {
             $request->validate([
                 'title' => 'required|string|max:255',
+                'topik' => 'required|string|max:255',
                 'image' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
                 'link_yt' => 'nullable|string|max:255',
                 'content' => 'required',
