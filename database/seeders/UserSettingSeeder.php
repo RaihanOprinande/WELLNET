@@ -12,7 +12,7 @@ class UserSettingSeeder extends Seeder
 {
     public function run(): void{
 // Kosongkan tabel UserSetting untuk menghindari duplikat ID jika Anda menjalankan seeder berulang
-        UserSetting::truncate();
+        // UserSetting::truncate();
 
         $parentUsers = User::where('role', 'parent')->get();
         $personalUsers = User::where('role', 'personal')->get();
