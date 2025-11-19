@@ -28,7 +28,7 @@ class LogPelanggaranController extends Controller
      */
     public function store(Request $request)
     {
-                 $data = new LogPelanggaran;
+        $data = new LogPelanggaran;
 
         $rules =[
             'setting_id' => 'required|integer|exists:user_setting,id',
