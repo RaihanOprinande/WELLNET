@@ -105,7 +105,7 @@ class LogQuizController extends Controller
             // dd($answers);
             $userSetting->save();
 
-            $logquiz = 
+            
             DB::commit();
 
             return response()->json([
