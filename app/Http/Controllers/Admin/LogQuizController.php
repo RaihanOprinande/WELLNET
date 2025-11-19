@@ -14,10 +14,17 @@ class LogQuizController extends Controller
             'setting.user',
             'setting.child',
             'tema',
-            'soal'
+            'soal',
+            'opsi'
         ])->paginate(10);
 
-        return view('admin.log_quiz.index', compact('log_quiz'));
+    $jawaban_benar_collection = $log_quiz->filter(function ($item) {
+        // Cek apakah relasi 'opsi' ada dan apakah is_correct bernilai true (1)
+        // Gunakan operator === true untuk kejelasan, asumsikan is_correct dicasting ke boolean
+        return $item->opsi && $item->opsi->is_correct === true;
+    });
+
+        return view('admin.log_quiz.index', compact('log_quiz','jawaban_benar_collection'));
     }
 
     public function show($id)

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -28,35 +29,83 @@ class SocialLoginController extends Controller
     public function googleLogin(Request $request)
     {
         try {
-            $socialUser = Socialite::driver('google')->stateless()->user();
-        } catch (Exception $e) {
-            Log::error("Socialite Callback Failed: " . $e->getMessage());
-            return redirect()->away(
-                "wellnet://login-error?message=" . urlencode("Otentikasi gagal")
+            $googleUser = Socialite::driver('google')->user();
+
+            // Find or create user
+            $user = User::updateOrCreate(
+                ['email' => $googleUser->getEmail()],
+                [
+                    'username' => $googleUser->getName(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                    'email_verified_at' => now(),
+                ]
             );
-        }
 
-        $user = User::where('google_id', $socialUser->getId())
-                    ->orWhere('email', $socialUser->getEmail())
-                    ->first();
+            Auth::login($user);
 
-        $roleDefault = 'parent';
-        if (!$user) {
-            $user = User::create([
-                'username' => $socialUser->getName() ?? 'User Baru',
-                'email' => $socialUser->getEmail(),
-                'password' => Hash::make(Str::random(32)),
-                'role' => $roleDefault,
-                'google_id' => $socialUser->getId(),
-                'email_verified_at' => now(),
+            // Generate API token for mobile app
+            $token = $user->createToken('google-login')->plainTextToken;
+
+            // Return token and user data as JSON
+            return response()->json([
+                'success' => true,
+                'message' => 'Google login successful',
+                'token' => $token,
+                'user' => [
+                    'id' => $user->id,
+                    'username' => $user->name,
+                    'email' => $user->email,
+                    'avatar' => $user->avatar,
+                ]
             ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Google login failed: ' . $e->getMessage()
+            ], 401);
         }
+    }
+        public function mobileGoogleLogin(Request $request)
+    {
+        $validated = $request->validate([
+            'google_id' => 'required|string',
+            'email' => 'required|email',
+            'username' => 'required|string',
+            'avatar' => 'nullable|string',
+        ]);
 
-        $abilities = $this->getAbilities($user->role);
-        $token = $user->createToken('social-session', $abilities)->plainTextToken;
+        try {
+            $user = User::updateOrCreate(
+                ['email' => $validated['email']],
+                [
+                    'username' => $validated['username'],
+                    'google_id' => $validated['google_id'],
+                    'avatar' => $validated['avatar'],
+                    'email_verified_at' => now(),
+                ]
+            );
 
-        // Redirect ke aplikasi dengan deep link
-        $deepLink = "wellnet://login-success?token={$token}&user_id={$user->id}&role={$user->role}";
-        return redirect()->away($deepLink);
+            $token = $user->createToken('mobile-google-login')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'avatar' => $user->avatar,
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Login failed: ' . $e->getMessage()
+            ], 401);
+        }
     }
 }
