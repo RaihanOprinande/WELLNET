@@ -98,6 +98,7 @@ class LogQuizController extends Controller
                 }
                 $userSetting->skor += $scoreChange;
                 $totalScoreChange += $scoreChange;
+                $userSetting->lencana = $userSetting->badge_Name;
             }
 
             // 3. Update Skor Final dan Commit
@@ -113,6 +114,7 @@ class LogQuizController extends Controller
                     'jawaban_benar' => $totalCorrect,
                     'skor_akumulasi' => number_format($totalScoreChange,1),
                     'skor_terbaru' => number_format($userSetting->skor, 1),
+                    'badge_anda' => $userSetting->badge_Name
                 ]
             ], 200);
 
