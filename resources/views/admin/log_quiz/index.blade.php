@@ -19,7 +19,6 @@
                 <div class="col-md-6">
                     <div class="title">
                         <h2>Log Quiz User</h2>
-                        <p class="text-muted">Analisis pengerjaan quiz per minggu</p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -34,12 +33,15 @@
                 </div>
             </div>
 
-        {{-- Grafik Progres Quiz --}}
-<div class="card-style mb-30">
-    <h6 class="mb-3">Progres & Akurasi Quiz per Minggu</h6>
-    <canvas id="quizChart" height="120"></canvas>
+        <!-- Grafik Mingguan Quiz -->
+<div class="col-lg-12">
+    <div class="card-style mb-30">
+        <h5 class="mb-3">Grafik Progres dan Akurasi Grafik Quiz Mingguan</h5>
+        <div class="chart-container-sm">
+            <canvas id="quizChart"></canvas>
+        </div>
+    </div>
 </div>
-
 
 
         {{-- Tabel --}}
@@ -149,19 +151,22 @@
     </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
 <script>
-    const labels = @json($labels->values());
+    /** ====================
+     *  GRAFIK QUIZ MINGGUAN
+     * ===================== */
+    const quizLabels = @json($quizLabels->values());
     const completionData = @json(array_values($completion->toArray()));
     const accuracyData = @json(array_values($accuracy->toArray()));
 
-    const ctx = document.getElementById('quizChart').getContext('2d');
+    const ctxQuiz = document.getElementById('quizChart').getContext('2d');
 
-    new Chart(ctx, {
+    new Chart(ctxQuiz, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: quizLabels,
             datasets: [
                 {
                     label: 'Jumlah User Selesai',
@@ -182,10 +187,7 @@
         },
         options: {
             responsive: true,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
+            interaction: { mode: 'index', intersect: false },
             stacked: false,
             scales: {
                 y: {
@@ -206,5 +208,6 @@
         }
     });
 </script>
+
 
 @endsection

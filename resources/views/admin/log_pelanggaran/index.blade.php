@@ -146,8 +146,8 @@
             datasets: [{
                 label: 'Jumlah Pelanggaran Bulan Ini',
                 data: kategoriValues,
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.6 )',
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
         },

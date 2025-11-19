@@ -6,6 +6,9 @@ use App\Models\LogPelanggaran;
 use App\Models\User;
 use App\Models\UserChildren;
 use App\Models\UserSetting;
+use App\Models\AppUsageLog;
+use App\Models\LogQuiz;
+use App\Models\TemaQuiz;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -105,32 +108,84 @@ class DashboardController extends Controller
         $lencanaValues = $lencanaStats->pluck('total');
 
         // ===============================
-// GRAFIK PELANGGARAN PER KATEGORI (BULANAN)
+// PELANGGARAN PALING SERING DILAKUKAN
 // ===============================
-
-// Range bulan ini
-$startOfMonth = Carbon::now()->startOfMonth();
-$endOfMonth = Carbon::now()->endOfMonth();
-
-// Ambil jumlah pelanggaran per kategori
-$pelanggaranKategori = LogPelanggaran::select(
+$pelanggaranTerbanyak = LogPelanggaran::select(
         'pelanggaran',
         DB::raw('COUNT(*) as total')
     )
-    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
     ->groupBy('pelanggaran')
     ->orderBy('total', 'desc')
+    ->first();
+
+$pelanggaranTerbanyakNama = $pelanggaranTerbanyak->pelanggaran ?? 'Tidak ada data';
+$pelanggaranTerbanyakTotal = $pelanggaranTerbanyak->total ?? 0;
+
+
+// ===============================
+// GRAFIK QUIZ HARIAN MINGGU INI
+// ===============================
+$startOfWeek = Carbon::now()->startOfWeek()->toDateString(); // Senin
+$endOfWeek = Carbon::now()->endOfWeek()->toDateString();     // Minggu
+
+$quizDailyLogs = LogQuiz::select(
+        DB::raw('DAYOFWEEK(created_at) as day_index'),
+        DB::raw('COUNT(DISTINCT setting_id) as total_user')
+    )
+    ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+    ->groupBy('day_index')
+    ->orderBy('day_index', 'asc')
     ->get();
 
-// Siapkan data untuk Chart.js
-$kategoriLabels = $pelanggaranKategori->pluck('pelanggaran');
-$kategoriValues = $pelanggaranKategori->pluck('total');
+// Inisialisasi semua hari agar selalu ada (Senin–Minggu)
+Carbon::setLocale('id');
+$daysOfWeekQuiz = [];
+for ($i = 1; $i <= 7; $i++) {
+    // MySQL DAYOFWEEK: 1=Minggu, 2=Senin,...7=Sabtu
+    $dayName = Carbon::now()->startOfWeek()->addDays($i - 1)->isoFormat('dddd');
+    $daysOfWeekQuiz[$i] = ['label' => $dayName, 'value' => 0];
+}
+
+// Isi data jika ada log
+foreach ($quizDailyLogs as $log) {
+    $dayIndex = (int) $log->day_index;
+    // DAYOFWEEK: 1=Minggu, 2=Senin,...7=Sabtu
+    // Kita ingin Senin=0 index pertama, jadi shift array
+    if ($dayIndex == 1) { // Minggu
+        $dayIndex = 7;
+    } else {
+        $dayIndex -= 1;
+    }
+    $daysOfWeekQuiz[$dayIndex + 1]['value'] = $log->total_user;
+}
+
+$quizChartData = array_values($daysOfWeekQuiz);
+// ===============================
+// TOP 5 APLIKASI PALING SERING DIPAKAI
+// ===============================
+
+$topApps = AppUsageLog::select(
+        'app_name',
+        DB::raw('SUM(used_minutes) as total_used')
+    )
+    ->groupBy('app_name')
+    ->orderBy('total_used', 'desc')
+    ->limit(5)
+    ->get();
+
+$topAppLabels = $topApps->pluck('app_name');
+$topAppValues = $topApps->pluck('total_used');
+
 
 
 
         return view('welcome',compact('JumlahPengguna','namaPengguna','chartData','lencanaLabels',
-    'lencanaValues',    'kategoriLabels',
-    'kategoriValues'));
+    'lencanaValues',   'pelanggaranTerbanyakNama',
+'pelanggaranTerbanyakTotal',
+    'topAppLabels',
+    'topAppValues',
+     'quizChartData'  // <- ini tambahan untuk grafik quiz harian
+    ));
 
     }
 
