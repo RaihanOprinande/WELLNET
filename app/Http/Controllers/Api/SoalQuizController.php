@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SoalQuizResource;
+use App\Models\LogQuiz;
 use App\Models\SoalQuiz;
 use Illuminate\Http\Request;
 
@@ -26,24 +27,24 @@ class SoalQuizController extends Controller
     /**
      * Display list soal based on temaquiz_id.
      */
-    public function show($temaId)
+    public function show(Request $request, $temaId)
     {
         $data = SoalQuiz::with('tema')
             ->where('temaquiz_id', $temaId)
             ->get();
 
-        // ✔ Perbaikan: cek apakah data kosong
-        if ($data->isEmpty()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Tidak ada soal untuk tema ini',
-                'data' => []
-            ], 404);
-        }
+            // ✔ Perbaikan: cek apakah data kosong
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Tidak ada soal untuk tema ini',
+                    'data' => []
+                ], 404);
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data berhasil ditampilkan',
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data berhasil ditampilkan',
             'data' => SoalQuizResource::collection($data)
         ], 200);
     }

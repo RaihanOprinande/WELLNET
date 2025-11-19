@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LogPelanggaran;
+use App\Models\UserSetting;
+use Google\Service\Calendar\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class LogPelanggaranController extends Controller
@@ -26,17 +29,20 @@ class LogPelanggaranController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $settingId)
     {
         $data = new LogPelanggaran;
 
         $rules =[
-            'setting_id' => 'required|integer|exists:user_setting,id',
+            // 'setting_id' => 'required|integer|exists:user_setting,id',
             'pelanggaran' => 'required|string'
-
 
         ];
         $validator = Validator::make($request->all(),$rules);
+
+        $today = Carbon::today();
+
+        $SettingUser = UserSetting::find($settingId);
 
         if ($validator->fails()) {
             return response()->json([
@@ -46,17 +52,45 @@ class LogPelanggaranController extends Controller
             ],400);
         }
 
-        $data->setting_id = $request->setting_id;
+        $data->setting_id = $settingId;
         $data->pelanggaran = $request->pelanggaran;
 
-
         $post = $data->save();
+        // 1. Hitung jumlah pelanggaran
+        $totalPelanggaranHariIni = LogPelanggaran::where('setting_id', $settingId)
+        // Filter hanya data yang dibuat hari ini (created_at >= hari ini 00:00:00)
+        ->whereDate('created_at', $today)
+        ->count();
 
-        return response()->json([
+        if ($totalPelanggaranHariIni > 3) {
+            // 2. Jika lebih dari 3, kurangi skor user sebesar 1 poin
+            $SettingUser->skor -= 5;
+            $SettingUser->badge_Name;
+            $SettingUser->save();
+
+            return response()->json([
             'status' => true,
             'message' => 'Data berhasil ditambahkan',
-            // 'data' => $data
+            'data' => [
+                'total_pelanggaran_hari_ini' => $totalPelanggaranHariIni,
+                'skor_final' => $SettingUser->skor,
+                'badge_name' => $SettingUser->badge_Name
+            ]
         ],201);
+        } else {
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil ditambahkan',
+                'data' => [
+                    'total_pelanggaran_hari_ini' => $totalPelanggaranHariIni
+                //     'skor_final' => $SettingUser->skor,
+                //     'badge_name' => $SettingUser->badge_Name
+                ]
+            ],201);
+        }
+
+        // dd( $totalPelanggaranHariIni);
+
     }
 
     /**

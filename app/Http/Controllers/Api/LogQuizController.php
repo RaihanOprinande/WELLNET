@@ -84,7 +84,7 @@ class LogQuizController extends Controller
                 $scoreChange = $isCorrect ? 0.5 : -0.5;
 
                 // Logging Jawaban
-                LogQuiz::create([
+                $logquiz = LogQuiz::create([
                     'setting_id' => $settingId,
                     'soalquiz_id' => $answer['soalquiz_id'],
                     'temaquiz_id' => $answer['temaquiz_id'],
@@ -104,6 +104,8 @@ class LogQuizController extends Controller
             // 3. Update Skor Final dan Commit
             // dd($answers);
             $userSetting->save();
+
+            $logquiz = 
             DB::commit();
 
             return response()->json([
