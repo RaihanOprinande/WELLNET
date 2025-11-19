@@ -32,10 +32,25 @@
                 </div>
             </div>
 
-            {{-- Card Detail --}}
-            <div class="card-style mb-30">
-                <div class="title mb-3">
-                    <h6>Informasi Detail Log Pelanggaran</h6>
+        {{-- Card Detail --}}
+        <div class="card-style mb-30">
+            <div class="title mb-3">
+                <h6>Informasi Detail Log Pelanggaran</h6>
+            </div>
+
+            <div class="row">
+                {{-- Username / Nama Anak --}}
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Username / Nama Anak:</label>
+                    <p class="text-dark">
+                        @if ($log->setting && $log->setting->child)
+                            {{ $log->setting->child->username }}
+                        @elseif ($log->setting && $log->setting->user)
+                            {{ $log->setting->user->username }}
+                        @else
+                            -
+                        @endif
+                    </p>
                 </div>
 
                 <div class="row">

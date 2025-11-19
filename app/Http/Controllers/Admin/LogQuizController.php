@@ -4,28 +4,51 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LogQuiz;
+use App\Models\TemaQuiz;
 use Illuminate\Http\Request;
 
 class LogQuizController extends Controller
 {
-    public function index()
-    {
-        $log_quiz = LogQuiz::with([
-            'setting.user',
-            'setting.child',
-            'tema',
-            'soal',
-            'opsi'
-        ])->paginate(10);
+public function index()
+{
+    $log_quiz = LogQuiz::with([
+        'setting.user',
+        'setting.child',
+        'tema',
+        'soal'
+    ])->paginate(10);
 
-    $jawaban_benar_collection = $log_quiz->filter(function ($item) {
-        // Cek apakah relasi 'opsi' ada dan apakah is_correct bernilai true (1)
-        // Gunakan operator === true untuk kejelasan, asumsikan is_correct dicasting ke boolean
-        return $item->opsi && $item->opsi->is_correct === true;
-    });
+    // kolom jawaban benar dari tabel soal_quiz
+    $correctColumn = 'jawaban_benar';
 
-        return view('admin.log_quiz.index', compact('log_quiz','jawaban_benar_collection'));
-    }
+    // 1. progress (jumlah user selesai per week)
+    $completion = LogQuiz::selectRaw('temaquiz_id, COUNT(DISTINCT setting_id) as total_user')
+        ->groupBy('temaquiz_id')
+        ->pluck('total_user', 'temaquiz_id');
+
+    // 2. akurasi per week
+    $accuracy = LogQuiz::selectRaw("
+            log_quiz.temaquiz_id,
+            SUM(CASE WHEN log_quiz.jawaban_user = soal_quiz.$correctColumn THEN 1 ELSE 0 END) / COUNT(*) * 100 as accuracy
+        ")
+        ->join('soal_quiz', 'log_quiz.soalquiz_id', '=', 'soal_quiz.id')
+        ->groupBy('log_quiz.temaquiz_id')
+        ->pluck('accuracy', 'temaquiz_id');
+
+    // 3. labels (week)
+    $labels = TemaQuiz::orderBy('week')->pluck('week', 'id');
+
+    return view('admin.log_quiz.index', compact(
+        'log_quiz',
+        'labels',
+        'completion',
+        'accuracy'
+    ));
+}
+
+
+
+
 
     public function show($id)
     {
