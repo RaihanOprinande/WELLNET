@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\LogQuiz;
 use App\Models\TemaQuiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,14 +13,30 @@ class TemaQuizController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(String $SettingId)
     {
         $data = TemaQuiz::all();
-        return response()->json([
-            'status' => true,
-            'message' => 'Data berhasil ditampilkan',
-            'data' => $data
-        ],200);
+        try {
+            $TemaQuizCek = LogQuiz::where('setting_id',$SettingId)->get();
+            $temaQuizIDget = $TemaQuizCek->pluck('temaquiz_id');
+            $temaQuizId = $temaQuizIDget->unique();
+
+            // dd($temaQuizId);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil ditampilkan',
+                'tema_quiz_ids' => $temaQuizId,
+                'data' => $data
+                // 'data' => $data
+            ],200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

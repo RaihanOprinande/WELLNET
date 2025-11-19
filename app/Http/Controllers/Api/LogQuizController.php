@@ -84,7 +84,7 @@ class LogQuizController extends Controller
                 $scoreChange = $isCorrect ? 0.5 : -0.5;
 
                 // Logging Jawaban
-                LogQuiz::create([
+                $logquiz = LogQuiz::create([
                     'setting_id' => $settingId,
                     'soalquiz_id' => $answer['soalquiz_id'],
                     'temaquiz_id' => $answer['temaquiz_id'],
@@ -98,11 +98,14 @@ class LogQuizController extends Controller
                 }
                 $userSetting->skor += $scoreChange;
                 $totalScoreChange += $scoreChange;
+                $userSetting->lencana = $userSetting->badge_Name;
             }
 
             // 3. Update Skor Final dan Commit
             // dd($answers);
             $userSetting->save();
+
+            
             DB::commit();
 
             return response()->json([
@@ -113,6 +116,7 @@ class LogQuizController extends Controller
                     'jawaban_benar' => $totalCorrect,
                     'skor_akumulasi' => number_format($totalScoreChange,1),
                     'skor_terbaru' => number_format($userSetting->skor, 1),
+                    'badge_anda' => $userSetting->badge_Name
                 ]
             ], 200);
 
