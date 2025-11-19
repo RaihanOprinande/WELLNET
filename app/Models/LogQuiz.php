@@ -18,7 +18,9 @@ class LogQuiz extends Model
         'setting_id',
         'temaquiz_id',
         'soalquiz_id',
-        'jawaban_user',
+        'opsi_soal_id',
+        // 'jawaban_user',
+        'is_correct'
     ];
 
     // Relasi ke user_setting (bukan langsung ke user lagi)
@@ -35,5 +37,10 @@ class LogQuiz extends Model
     public function soal()
     {
         return $this->belongsTo(SoalQuiz::class, 'soalquiz_id');
+    }
+
+    public function opsi()
+    {
+        return $this->belongsTo(OpsiSoal::class, 'opsi_soal_id');
     }
 }

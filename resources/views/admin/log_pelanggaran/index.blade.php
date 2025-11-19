@@ -28,28 +28,28 @@
             }
         </style>
 
-        {{-- Header --}}
-        <div class="title-wrapper pt-30">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <div class="title">
-                        <h2>Log Pelanggaran User</h2>
+            {{-- Header --}}
+            <div class="title-wrapper pt-30">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="title">
+                            <h2>Log Pelanggaran User</h2>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="breadcrumb-wrapper">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb active">
-                                <li class="breadcrumb-item">
-                                    <a href="#">Monitoring</a>
-                                </li>
-                                <li class="breadcrumb-item active">Log Pelanggaran</li>
-                            </ol>
-                        </nav>
+                    <div class="col-md-6">
+                        <div class="breadcrumb-wrapper">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb active">
+                                    <li class="breadcrumb-item">
+                                        <a href="#">Monitoring</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">Log Pelanggaran</li>
+                                </ol>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
          <div class="col-lg-12">
     <div class="card-style mb-30">
@@ -69,8 +69,6 @@
                             <div>
                                 <h6 class="mb-10">Daftar Log Pelanggaran</h6>
                             </div>
-                            {{-- <a href="{{ route('log_pelanggaran.create') }}" class="btn btn-primary btn-sm">+ Tambah Data</a> --}}
-                        </div>
 
                         <div class="table-responsive">
                             <table id="table" class="table" style="width: 100%">
@@ -117,11 +115,12 @@
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</button>
                                             </form> --}}
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
