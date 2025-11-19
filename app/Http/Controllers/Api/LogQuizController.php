@@ -58,7 +58,7 @@ class LogQuizController extends Controller
         // Asumsi semua setting_id di quiz ini sama, ambil yang pertama
         $settingId = $answers[0]['setting_id'];
         $totalCorrect = 0;
-        $totalScoreChange = 0;
+        $totalScoreChange = 0.0;
 
         DB::beginTransaction();
 
@@ -101,16 +101,17 @@ class LogQuizController extends Controller
             }
 
             // 3. Update Skor Final dan Commit
+            // dd($answers);
             $userSetting->save();
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
-                'message' => '12 Jawaban kuis berhasil disimpan dan skor telah diperbarui.',
+                'message' => 'Jawaban kuis berhasil disimpan dan skor telah diperbarui.',
                 'data' => [
                     'total_soal' => count($answers),
                     'jawaban_benar' => $totalCorrect,
-                    'skor_akumulasi' => $totalScoreChange,
+                    'skor_akumulasi' => number_format($totalScoreChange,1),
                     'skor_terbaru' => number_format($userSetting->skor, 1),
                 ]
             ], 200);
