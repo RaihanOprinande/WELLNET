@@ -22,9 +22,11 @@ Route::get('/user', function (Request $request) {
 
 Route::get('TemaQuiz/{id}',[TemaQuizController::class,'show']);
 Route::get('TemaQuiz/index/{SettingId}',[TemaQuizController::class,'index']);
+Route::get('TemaQuiz/check/{SettingId}',[TemaQuizController::class,'getTemaStatus']);
 Route::post('TemaQuiz/store',[TemaQuizController::class,'store']);
 Route::put('TemaQuiz/{id}',[TemaQuizController::class,'update']);
 Route::delete('TemaQuiz/{id}',[TemaQuizController::class,'destroy']);
+
 
 
 // END API TEMA QUIZ
