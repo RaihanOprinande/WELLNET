@@ -34,7 +34,8 @@ class LogQuizController extends Controller
             'setting_id' => 'required|integer|exists:user_setting,id',
             'temaquiz_id' => 'required|integer|exists:tema_quiz,id',
             'soalquiz_id' => 'required|integer|exists:soal_quiz,id',
-            'jawaban_user' => 'required|string',
+            
+            // 'jawaban_user' => 'required|string',
 
         ];
         $validator = Validator::make($request->all(),$rules);
@@ -85,7 +86,7 @@ class LogQuizController extends Controller
     }
 
     public function showuser(string $id){
-        
+
     $data = LogQuiz::with('user')->where("setting_id",$id)->get();
 
 

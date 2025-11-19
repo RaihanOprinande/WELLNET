@@ -61,18 +61,18 @@ public function store(Request $request)
 
             // 3. Buat Token Sanctum
             // 'auth_token' adalah nama token yang bisa Anda ubah
-            // $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'success' => true,
                 'message' => 'Login berhasil.',
+                'token' => $token,
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->username,
                     'email' => $user->email,
                     'role' => $user->role,
                 ],
-                // 'token' => $token
             ], 200);
 
         } else {
