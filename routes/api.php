@@ -21,10 +21,12 @@ Route::get('/user', function (Request $request) {
 // API TEMA QUIZ CRUD
 
 Route::get('TemaQuiz/{id}',[TemaQuizController::class,'show']);
-Route::get('TemaQuiz',[TemaQuizController::class,'index']);
+Route::get('TemaQuiz/index/{SettingId}',[TemaQuizController::class,'index']);
+Route::get('TemaQuiz/check/{SettingId}',[TemaQuizController::class,'getTemaStatus']);
 Route::post('TemaQuiz/store',[TemaQuizController::class,'store']);
 Route::put('TemaQuiz/{id}',[TemaQuizController::class,'update']);
 Route::delete('TemaQuiz/{id}',[TemaQuizController::class,'destroy']);
+
 
 
 // END API TEMA QUIZ
@@ -64,15 +66,15 @@ Route::get('log_quiz/user/{id}',[LogQuizController::class,'showuser']);
 
 // END API LOG QUIZ
 
-// API LOG QUIZ
+// API LOG PELANGGARAN
 
 Route::get('log_pelanggaran',[LogPelanggaranController::class,'index']);
-Route::post('log_pelanggaran/store',[LogPelanggaranController::class,'store']);
+Route::post('log_pelanggaran/store/{settingId}',[LogPelanggaranController::class,'store']);
 Route::get('log_pelanggaran/{id}',[LogPelanggaranController::class,'show']);
 Route::get('log_pelanggaran/user/{id}',[LogPelanggaranController::class,'showuser']);
 
 
-// END API LOG QUIZ
+// END API PELANGGARAN
 
 // API LOGIN
 
