@@ -19,15 +19,14 @@
                 <div class="col-md-6">
                     <div class="title">
                         <h2>Log Quiz User</h2>
+                        <p class="text-muted">Analisis pengerjaan quiz per minggu</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
-                                <li class="breadcrumb-item">
-                                    <a href="#">Quiz & Psychoeducation</a>
-                                </li>
+                                <li class="breadcrumb-item"><a href="#">Quiz & Psychoeducation</a></li>
                                 <li class="breadcrumb-item active">Log Quiz</li>
                             </ol>
                         </nav>
@@ -35,6 +34,14 @@
                 </div>
             </div>
         </div>
+
+        {{-- Grafik Progres Quiz --}}
+<div class="card-style mb-30">
+    <h6 class="mb-3">Progres & Akurasi Quiz per Minggu</h6>
+    <canvas id="quizChart" height="120"></canvas>
+</div>
+
+
 
         {{-- Tabel --}}
         <div class="tables-wrapper">
@@ -94,10 +101,75 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="mt-3">
+                            {{ $log_quiz->links() }}
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = @json($labels->values());
+    const completionData = @json(array_values($completion->toArray()));
+    const accuracyData = @json(array_values($accuracy->toArray()));
+
+    const ctx = document.getElementById('quizChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Jumlah User Selesai',
+                    data: completionData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Akurasi (%)',
+                    data: accuracyData,
+                    type: 'line',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 2,
+                    fill: false,
+                    yAxisID: 'y1'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            stacked: false,
+            scales: {
+                y: {
+                    type: 'linear',
+                    position: 'left',
+                    title: { display: true, text: 'Jumlah User' }
+                },
+                y1: {
+                    type: 'linear',
+                    position: 'right',
+                    min: 0,
+                    max: 100,
+                    ticks: { callback: val => val + '%' },
+                    title: { display: true, text: 'Akurasi (%)' },
+                    grid: { drawOnChartArea: false }
+                }
+            }
+        }
+    });
+</script>
+
 @endsection

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\LogPelanggaran;
 use App\Models\UserSetting;
 use Illuminate\Http\Request;
@@ -11,8 +13,31 @@ class LogPelanggaranController extends Controller
 {
     public function index()
     {
+        // ===============================
+// GRAFIK PELANGGARAN PER KATEGORI (BULANAN)
+// ===============================
+
+// Range bulan ini
+$startOfMonth = Carbon::now()->startOfMonth();
+$endOfMonth = Carbon::now()->endOfMonth();
+
+// Ambil jumlah pelanggaran per kategori
+$pelanggaranKategori = LogPelanggaran::select(
+        'pelanggaran',
+        DB::raw('COUNT(*) as total')
+    )
+    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    ->groupBy('pelanggaran')
+    ->orderBy('total', 'desc')
+    ->get();
+
+// Siapkan data untuk Chart.js
+$kategoriLabels = $pelanggaranKategori->pluck('pelanggaran');
+$kategoriValues = $pelanggaranKategori->pluck('total');
+
         $logs = LogPelanggaran::with('setting')->latest()->get();
-        return view('admin.log_pelanggaran.index', compact('logs'));
+        return view('admin.log_pelanggaran.index', compact('logs',    'kategoriLabels',
+    'kategoriValues'));
     }
 
     // public function create()

@@ -44,7 +44,7 @@
                     <label class="form-label fw-bold">Username / Nama Anak:</label>
                     <p class="text-dark">
                         @if ($log->setting && $log->setting->child)
-                            {{ $log->setting->child->nama_anak }}
+                            {{ $log->setting->child->username }}
                         @elseif ($log->setting && $log->setting->user)
                             {{ $log->setting->user->username }}
                         @else

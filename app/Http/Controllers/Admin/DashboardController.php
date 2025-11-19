@@ -90,7 +90,47 @@ class DashboardController extends Controller
 
         // dd($this->sortDaysForChart($daysOfWeek->values()->all()));
 
-        return view('welcome',compact('JumlahPengguna','namaPengguna','chartData'));
+        // ===============================
+        // GRAFIK DISTRIBUSI LENCA
+        // ===============================
+
+        // Ambil jumlah user berdasarkan lencana
+        $lencanaStats = UserSetting::select('lencana', DB::raw('COUNT(*) as total'))
+            ->groupBy('lencana')
+            ->orderBy('lencana', 'asc')
+            ->get();
+
+        // Siapkan label dan data
+        $lencanaLabels = $lencanaStats->pluck('lencana');
+        $lencanaValues = $lencanaStats->pluck('total');
+
+        // ===============================
+// GRAFIK PELANGGARAN PER KATEGORI (BULANAN)
+// ===============================
+
+// Range bulan ini
+$startOfMonth = Carbon::now()->startOfMonth();
+$endOfMonth = Carbon::now()->endOfMonth();
+
+// Ambil jumlah pelanggaran per kategori
+$pelanggaranKategori = LogPelanggaran::select(
+        'pelanggaran',
+        DB::raw('COUNT(*) as total')
+    )
+    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    ->groupBy('pelanggaran')
+    ->orderBy('total', 'desc')
+    ->get();
+
+// Siapkan data untuk Chart.js
+$kategoriLabels = $pelanggaranKategori->pluck('pelanggaran');
+$kategoriValues = $pelanggaranKategori->pluck('total');
+
+
+
+        return view('welcome',compact('JumlahPengguna','namaPengguna','chartData','lencanaLabels',
+    'lencanaValues',    'kategoriLabels',
+    'kategoriValues'));
 
     }
 

@@ -3,6 +3,21 @@
 @section('title', 'Log Pelanggaran')
 
 @section('content')
+
+<style>
+    /* Perbaikan ukuran grafik badge agar tidak terlalu besar */
+    #badgeChart {
+        max-height: 300px !important;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .chart-container-sm {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+</style>
 <section class="section">
     <div class="container-fluid">
         <style>
@@ -36,6 +51,15 @@
             </div>
         </div>
 
+         <div class="col-lg-12">
+    <div class="card-style mb-30">
+        <h5 class="mb-3">Grafik Pelanggaran Per Kategori (Bulanan)</h5>
+        <div class="chart-container-sm">
+            <canvas id="kategoriChart"></canvas>
+        </div>
+    </div>
+</div>
+
         {{-- Tabel --}}
         <div class="tables-wrapper">
             <div class="row">
@@ -67,7 +91,7 @@
                                         <td>
                                             <p>
                                                 @if ($log->setting && $log->setting->child)
-                                                    {{ $log->setting->child->nama_anak }}
+                                                    {{ $log->setting->child->username }}
                                                 @elseif ($log->setting && $log->setting->user)
                                                     {{ $log->setting->user->username }}
                                                 @else
@@ -105,4 +129,38 @@
         </div>
     </div>
 </section>
+
+<script>
+    /** ====================
+     *  GRAFIK PELANGGARAN PER KATEGORI
+     * ===================== */
+    const kategoriLabels = @json($kategoriLabels);
+    const kategoriValues = @json($kategoriValues);
+
+    new Chart(document.getElementById('kategoriChart'), {
+        type: 'bar',
+        data: {
+            labels: kategoriLabels,
+            datasets: [{
+                label: 'Jumlah Pelanggaran Bulan Ini',
+                data: kategoriValues,
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y', // Horizontal bar chart agar mudah dibaca
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+
 @endsection
