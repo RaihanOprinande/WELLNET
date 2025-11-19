@@ -7,24 +7,19 @@
     <div class="container-fluid">
 
         {{-- Header --}}
-        <div class="title-wrapper pt-30 mb-3">
+        <div class="title-wrapper pt-30 mb-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <div class="title">
-                        <h2>Detail Log Quiz</h2>
-                    </div>
+                    <h2>Detail Log Quiz</h2>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 text-end">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb active">
                                 <li class="breadcrumb-item">
-                                    <a href="#">Quiz & Psychoeducation</a>
-                                </li>
-                                <li class="breadcrumb-item">
                                     <a href="{{ route('log_quiz.index') }}">Log Quiz</a>
                                 </li>
-                                <li class="breadcrumb-item active" aria-current="page">Detail</li>
+                                <li class="breadcrumb-item active">Detail</li>
                             </ol>
                         </nav>
                     </div>
@@ -33,67 +28,96 @@
         </div>
 
         {{-- Card Detail --}}
-        <div class="card-style mb-30">
-            <div class="title mb-3">
-                <h6>Informasi Detail Log Quiz</h6>
-            </div>
+        <div class="card-style mb-30 p-4">
 
             <div class="row">
-                {{-- Username / Nama Anak --}}
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Username / Nama Anak:</label>
-                    <p class="text-dark">
-                        @if ($log_quiz->setting && $log_quiz->setting->child)
-                            {{ $log_quiz->setting->child->nama_anak }}
-                        @elseif ($log_quiz->setting && $log_quiz->setting->user)
-                            {{ $log_quiz->setting->user->username }}
-                        @else
-                            -
-                        @endif
-                    </p>
+
+                {{-- Username --}}
+                <div class="col-md-6">
+                    <div class="input-style-1 mb-3">
+                        <label>Username / Nama Anak</label>
+                        <input type="text" class="form-control"
+                            value="{{ $log_quiz->setting->child->username
+                                    ?? $log_quiz->setting->user->username
+                                    ?? '-' }}"
+                            disabled>
+                    </div>
                 </div>
 
                 {{-- Tema --}}
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Tema Quiz:</label>
-                    <p class="text-dark">{{ $log_quiz->tema->title ?? '-' }}</p>
+                <div class="col-md-6">
+                    <div class="input-style-1 mb-3">
+                        <label>Tema Quiz</label>
+                        <input type="text" class="form-control"
+                            value="{{ $log_quiz->tema->title ?? '-' }}"
+                            disabled>
+                    </div>
                 </div>
 
                 {{-- Week --}}
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Week:</label>
-                    <p class="text-dark">{{ $log_quiz->tema->week ?? '-' }}</p>
+                <div class="col-md-6">
+                    <div class="input-style-1 mb-3">
+                        <label>Week</label>
+                        <input type="text" class="form-control"
+                            value="{{ $log_quiz->tema->week ?? '-' }}"
+                            disabled>
+                    </div>
                 </div>
 
                 {{-- Waktu --}}
-                <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Waktu Pengerjaan:</label>
-                    <p class="text-dark">{{ $log_quiz->created_at->format('Y-m-d H:i:s') }}</p>
+                <div class="col-md-6">
+                    <div class="input-style-1 mb-3">
+                        <label>Waktu Pengerjaan</label>
+                        <input type="text" class="form-control"
+                            value="{{ $log_quiz->created_at->format('Y-m-d H:i:s') }}"
+                            disabled>
+                    </div>
                 </div>
 
                 {{-- Pertanyaan --}}
-                <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold">Pertanyaan:</label>
-                    <div class="border rounded p-3 bg-light">
-                        {!! $log_quiz->soal->pertanyaan ?? '-' !!}
+                <div class="col-md-12">
+                    <div class="input-style-1 mb-3">
+                        <label>Pertanyaan</label>
+                        <textarea class="form-control" rows="4" disabled>{{ strip_tags($log_quiz->soal->pertanyaan ?? '-') }}</textarea>
                     </div>
                 </div>
 
                 {{-- Jawaban User --}}
-                <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold">Jawaban User:</label>
-                    <div class="border rounded p-3 bg-light">
-                        <p class="mb-0">{{ $log_quiz->jawaban_user ?? '-' }}</p>
+                <div class="col-md-12">
+                    <div class="input-style-1 mb-3">
+                        <label>Jawaban User</label>
+                        <textarea class="form-control" rows="3" disabled>{{ $log_quiz->opsi->opsi ?? '-' }}</textarea>
                     </div>
                 </div>
+
+                {{-- Status Jawaban --}}
+                <div class="col-md-12">
+                    <div class="input-style-1 mb-3">
+                        <label>Status Jawaban</label>
+                        <input type="text" class="form-control"
+                            value="{{ $log_quiz->is_correct ? 'Benar' : 'Salah' }}"
+                            disabled>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="mt-4">
-                <a href="{{ route('log_quiz.index') }}" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Kembali
+            {{-- Actions --}}
+            <div class="col-12 mt-3 d-flex justify-content-end">
+                <a href="{{ route('log_quiz.index') }}" class="main-btn light btn-hover">
+                    <i class="lni lni-arrow-left"></i> Kembali
                 </a>
             </div>
+
         </div>
     </div>
 </section>
+
+{{-- Style tambahan --}}
+<style>
+    .card-style {
+        border-radius: 12px;
+        background-color: #fff;
+    }
+</style>
 @endsection

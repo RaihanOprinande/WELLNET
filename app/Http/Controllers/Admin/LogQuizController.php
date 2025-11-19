@@ -29,7 +29,7 @@ public function index()
     // 2. akurasi per week
     $accuracy = LogQuiz::selectRaw("
             log_quiz.temaquiz_id,
-            SUM(CASE WHEN log_quiz.jawaban_user = soal_quiz.$correctColumn THEN 1 ELSE 0 END) / COUNT(*) * 100 as accuracy
+            SUM(CASE WHEN log_quiz.opsi_soal_id = soal_quiz.$correctColumn THEN 1 ELSE 0 END) / COUNT(*) * 100 as accuracy
         ")
         ->join('soal_quiz', 'log_quiz.soalquiz_id', '=', 'soal_quiz.id')
         ->groupBy('log_quiz.temaquiz_id')

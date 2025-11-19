@@ -98,7 +98,7 @@
                                                 <td>
                                                     <p>
                                                         @if ($item->setting && $item->setting->child)
-                                                            {{ $item->setting->child->nama_anak }}
+                                                            {{ $item->setting->child->username }}
                                                         @elseif ($item->setting && $item->setting->user)
                                                             {{ $item->setting->user->username }}
                                                         @else
@@ -120,8 +120,9 @@
                                                     <p>{{ $item->opsi->opsi }}</p>
                                                 </td>
                                                 <td>
-                                                    <p>{{ $jawaban_benar_collection }}</p>
-                                                </td>
+    <p>{{ $item->opsi->opsi ?? '-' }}</p>
+</td>
+
                                                 <td>
                                                     <p>{{ $item->created_at->format('Y-m-d H:i:s') }}</p>
                                                 </td>
