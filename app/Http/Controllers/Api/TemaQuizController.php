@@ -214,8 +214,12 @@ class TemaQuizController extends Controller
 
             $userAccessData[] = [
                 'id' => $theme->id,
-                'week' => $theme->week,
                 'title' => $theme->title,
+                'topik' => $theme->topik,
+                'materi_relevan' => $theme->materi_relevan,
+                'week' => $theme->week,
+                'created_at' => $theme->created_at,
+                'updated' => $theme->updated_at,
                 'status' => $status,
             ];
 
