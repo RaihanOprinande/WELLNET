@@ -69,6 +69,7 @@ public function store(Request $request)
                 'token' => $token,
                 'user' => [
                     'id' => $user->id,
+                    // 'token' => $token,
                     'name' => $user->username,
                     'email' => $user->email,
                     'role' => $user->role,
@@ -106,5 +107,29 @@ public function store(Request $request)
     public function destroy(string $id)
     {
         //
+    }
+
+    public function logout(Request $request)
+    {
+{
+        // 1. Memastikan user terotentikasi (dilakukan oleh middleware)
+        if ($request->user()) {
+
+            // 2. Revoke (Hapus) token yang digunakan untuk request saat ini dari database
+            // currentAccessToken() adalah method yang disediakan oleh HasApiTokens trait
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Logout berhasil. Sesi token telah diakhiri.'
+            ], 200); // HTTP 200 OK
+        }
+
+        // Ini hanya sebagai fallback, karena middleware sudah seharusnya menangkap ini
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Tidak ada sesi aktif atau user tidak terotentikasi.'
+        ], 401); // HTTP 401 Unauthorized
+    }
     }
 }
