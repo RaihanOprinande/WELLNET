@@ -101,7 +101,7 @@ class SocialLoginController extends Controller
                 ]
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Login failed: ' . $e->getMessage()

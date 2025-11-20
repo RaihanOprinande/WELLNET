@@ -28,6 +28,10 @@ class UserChildren extends Model
     {
         return $this->hasOne(UserSetting::class, 'child_id');
     }
+        public function emailVerifications()
+    {
+        return $this->hasMany(EmailVerification::class);
+    }
 
 
 }

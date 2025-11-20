@@ -89,6 +89,7 @@ Route::post('/auth/google/mobile', [SocialLoginController::class, 'mobileGoogleL
 
 Route::post('register',[RegisterController::class,'store']);
 Route::post('register/children',[RegisterController::class,'child']);
+Route::get('register/verify-email/{token}',[RegisterController::class,'verifyEmail']);
 
 
 // END API REGISTER
@@ -110,3 +111,7 @@ Route::put('user/update/{id}',[UserController::class,'update']);
 
 // END API USER
 
+// LOGOUT
+Route::post('logout',[LoginController::class,'logout']);
+
+// END LOGOUT
