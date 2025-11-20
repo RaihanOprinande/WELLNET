@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ChildVerificationEmail;
+use App\Models\EmailVerification;
 use App\Models\User;
 use App\Models\UserChildren;
 use Exception;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -106,7 +109,8 @@ class RegisterController extends Controller
         //
     }
 
-    public function child(Request $request){
+    public function child(Request $request)
+    {
         DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'parent_id' => 'required|integer|exists:users,id',
@@ -127,16 +131,23 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'profile' => $request->profile,
             ]);
-        $verificationUrl = URL::temporarySignedRoute('child.verify.deep_link', now()->addMinutes(60), ['id' => $child->id, 'hash' => sha1($child->email)]);
-        
-        Mail::to($child->email)->send(new ChildVerificationEmail($child, $verificationUrl));
+
+            $token = Str::random(64);
+            EmailVerification::create([
+                'child_id' => $child->id,
+                'token' => $token,
+                'expires_at' => now()->addHours(24),
+            ]);
+        // $verificationUrl = URL::temporarySignedRoute('child.verify.deep_link', now()->addMinutes(60), ['id' => $child->id, 'hash' => sha1($child->email)]);
+
+        Mail::to($child->email)->send(new ChildVerificationEmail($child, $token));
         DB::commit();
 
-        return response()->json([
-            'success' => true,
-            'messages' => 'Berhasil menambahkan akun anak',
-            'data' => $child,
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Registration successful. Please check your email to verify your account.',
+                'user_id' => $child->id,
+            ], 201);
 
         } catch (Exception $e) {
         DB::rollBack();
@@ -146,8 +157,43 @@ class RegisterController extends Controller
             // 'data' => $child,
         ]);
         }
+    }
 
+    public function verifyEmail($token)
+    {
+        try {
+            $verification = EmailVerification::where('token', $token)
+                ->where('expires_at', '>', now())
+                ->first();
 
+            if (!$verification) {
+                return view('emails.verify-error', [
+                    'message' => 'Invalid or expired verification token'
+                ]);
+            }
 
+            $user = User::find($verification->user_id);
+
+            // Mark email as verified
+            $user->update(['email_verified_at' => now()]);
+            $verification->delete();
+
+            // Create auth token for mobile
+            $authToken = $user->createToken('email-verified')->plainTextToken;
+
+            // Redirect to mobile app with token
+            $deepLink = 'wellnet://verified?token=' . $authToken . '&user_id=' . $user->id;
+
+            return view('emails.verify-success', [
+                'message' => 'Email verified successfully!',
+                'deepLink' => $deepLink,
+                'username' => $user->username,
+            ]);
+
+        } catch (Exception $e) {
+            return view('emails.verify-error', [
+                'message' => 'Verification failed: ' . $e->getMessage()
+            ]);
+        }
     }
 }
