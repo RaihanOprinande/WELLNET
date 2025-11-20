@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\SocialLoginController;
 use App\Http\Controllers\Api\TemaQuizController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserSettingController;
+use App\Http\Controllers\Api\AppLimitController;
+use App\Http\Controllers\Api\AppUsageController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -89,6 +92,7 @@ Route::post('/auth/google/mobile', [SocialLoginController::class, 'mobileGoogleL
 
 Route::post('register',[RegisterController::class,'store']);
 Route::post('register/children',[RegisterController::class,'child']);
+Route::get('register/verify-email/{token}',[RegisterController::class,'verifyEmail']);
 
 
 // END API REGISTER
@@ -100,8 +104,79 @@ Route::get('usersetting/{id}',[UserSettingController::class,'show']);
 Route::post('usersetting/store',[UserSettingController::class,'store']);
 Route::put('usersetting/update/{id}',[UserSettingController::class,'update']);
 
+Route::put('/usersetting/{id}/update-usage', [UserSettingController::class, 'updateUsage']);
+Route::get('/usersetting/{id}/usage-status', [UserSettingController::class, 'getUsageStatus']);
 
-// END API USER SETTING
+// ========== APP LIMITS ==========
+Route::prefix('app-limits')->group(function () {
+    Route::post('/store', [AppLimitController::class, 'store']);
+    Route::get('/{userId}', [AppLimitController::class, 'getUserLimits']);
+    Route::post('/sync-usage', [AppLimitController::class, 'syncUsage']);
+    Route::post('/check-block', [AppLimitController::class, 'checkAppBlock']);
+});
+
+// ========== VIOLATIONS ==========
+Route::prefix('violations')->group(function () {
+    Route::post('/log', [AppLimitController::class, 'logViolation']);
+    Route::get('/summary/{userId}', [AppLimitController::class, 'getViolationSummary']);
+});
+
+// ========== SLEEP SCHEDULE ==========
+// Route::prefix('sleep-schedule')->group(function () {
+//     Route::post('/store', [SleepScheduleController::class, 'store']);
+//     Route::get('/{userId}', [SleepScheduleController::class, 'show']);
+//     Route::post('/check-active', [SleepScheduleController::class, 'checkIfActive']);
+// });
+
+// // ========== DIGITAL FREE TIME ==========
+// Route::prefix('digital-freetime')->group(function () {
+//     Route::post('/store', [DigitalFreeTimeController::class, 'store']);
+//     Route::get('/{userId}', [DigitalFreeTimeController::class, 'show']);
+//     Route::post('/check-active', [DigitalFreeTimeController::class, 'checkIfActive']);
+// });
+
+// ========== MONITORING & ANALYTICS ==========
+Route::prefix('analytics')->group(function () {
+    // Weekly insights
+    Route::get('/weekly/{userId}', [UserSettingController::class, 'getWeeklyInsights']);
+
+    // Daily summary
+    Route::get('/daily/{userId}', [UserSettingController::class, 'getDailySummary']);
+
+    // App usage trends
+    Route::get('/app-trends/{userId}', [AppLimitController::class, 'getUsageTrends']);
+});
+
+// ========== PARENT NOTIFICATIONS ==========
+// Untuk user di bawah 14 tahun
+Route::prefix('parent-notify')->group(function () {
+    Route::post('/send-email', [UserSettingController::class, 'sendParentNotification']);
+    Route::get('/violation-report/{childId}', [UserSettingController::class, 'getChildViolationReport']);
+});
+
+//  // Sync usage data dari Flutter
+//  Route::post('/app-usage/sync', [AppUsageController::class, 'syncUsageData']);
+
+//  // Get statistics
+//  Route::get('/app-usage/statistics', [AppUsageController::class, 'getStatistics']);
+
+//  // Get favorite apps
+//  Route::get('/app-usage/favorites', [AppUsageController::class, 'getFavoriteApps']);
+
+//  // Get usage by date
+//  Route::get('/app-usage/daily/{date}', [AppUsageController::class, 'getDailyUsage']);
+
+//  // Get weekly chart data
+//  Route::get('/app-usage/weekly-chart', [AppUsageController::class, 'getWeeklyChart']);
+
+// // END API USER SETTING
+Route::prefix('app-usage')->group(function () {
+    Route::post('/sync', [AppUsageController::class, 'syncUsageData']);
+    Route::get('/statistics', [AppUsageController::class, 'getStatistics']);
+    Route::get('/favorites', [AppUsageController::class, 'getFavoriteApps']);
+    Route::get('/daily/{date}', [AppUsageController::class, 'getDailyUsage']);
+    Route::get('/weekly-chart', [AppUsageController::class, 'getWeeklyChart']);
+});
 
 // API USER
 Route::get('user',[UserController::class,'index']);
@@ -110,3 +185,7 @@ Route::put('user/update/{id}',[UserController::class,'update']);
 
 // END API USER
 
+// LOGOUT
+Route::post('logout',[LoginController::class,'logout']);
+
+// END LOGOUT
