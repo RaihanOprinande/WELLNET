@@ -112,17 +112,17 @@ class UserSettingController extends Controller
         }
 
         $rules =[
-            'user_id' => 'required|integer|exists:users,id',
+            'user_id' => 'sometimes|integer|exists:users,id',
             'child_id' => 'nullable|integer|exists:user_children,id',
-            'jenis_kelamin' => 'nullable|string',
-            'umur' => 'nullable|integer',
-            'skor' => 'required|integer',
-            'lencana' => 'required|string',
-            'downtime' => 'nullable',
-            'sleep_schedule_start' => 'nullable|date_format:H:i:s',
-            'sleep_schedule_end' => 'nullable|date_format:H:i:s',
-            'digital_freetime_start' => 'nullable|date_format:H:i:s',
-            'digital_freetime_end' => 'nullable|date_format:H:i:s',
+            'jenis_kelamin' => 'sometimes|nullable|string',
+            'umur' => 'sometimes|nullable|integer',
+            'skor' => 'sometimes|integer',
+            'lencana' => 'sometimes|string',
+            'downtime' => 'sometimes|nullable',
+            'sleep_schedule_start' => 'sometimes|nullable|date_format:H:i:s',
+            'sleep_schedule_end' => 'sometimes|nullable|date_format:H:i:s',
+            'digital_freetime_start' => 'sometimes|nullable|date_format:H:i:s',
+            'digital_freetime_end' => 'sometimes|nullable|date_format:H:i:s',
         ];
         $validator = Validator::make($request->all(),$rules);
 
@@ -173,4 +173,108 @@ class UserSettingController extends Controller
     {
         //
     }
+
+    // Tambahkan method baru di UserSettingController.php
+
+/**
+ * Update penggunaan HP hari ini
+ */
+public function updateUsage(Request $request, string $id)
+{
+    $data = UserSetting::find($id);
+
+    if (!$data) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan'
+        ], 404);
+    }
+
+    $rules = [
+        'used_minutes_today' => 'required|integer|min:0',
+        'current_session_start' => 'nullable|date',
+    ];
+
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validasi gagal',
+            'data' => $validator->errors()
+        ], 422);
+    }
+
+    try {
+        // Auto-reset jika hari sudah berganti
+        $today = now()->toDateString();
+        if ($data->last_reset_date !== $today) {
+            $data->used_minutes_today = 0;
+            $data->last_reset_date = $today;
+        }
+
+        // Update usage
+        $data->used_minutes_today = $request->used_minutes_today;
+        $data->current_session_start = $request->current_session_start;
+        $data->save();
+
+        // Cek apakah sudah mencapai target
+        $targetReached = $data->downtime && $data->used_minutes_today >= $data->downtime;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Usage berhasil diupdate',
+            'data' => [
+                'used_minutes_today' => $data->used_minutes_today,
+                'downtime_target' => $data->downtime,
+                'target_reached' => $targetReached,
+                'remaining_minutes' => $data->downtime ? max(0, $data->downtime - $data->used_minutes_today) : null,
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        Log::error("Usage Update Error: " . $e->getMessage());
+        return response()->json([
+            'status' => false,
+            'message' => 'Terjadi kesalahan pada server',
+        ], 500);
+    }
 }
+
+/**
+ * Get usage status hari ini
+ */
+public function getUsageStatus(string $id)
+{
+    $data = UserSetting::find($id);
+
+    if (!$data) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan'
+        ], 404);
+    }
+
+    // Auto-reset jika hari sudah berganti
+    $today = now()->toDateString();
+    if ($data->last_reset_date !== $today) {
+        $data->used_minutes_today = 0;
+        $data->last_reset_date = $today;
+        $data->save();
+    }
+
+    $targetReached = $data->downtime && $data->used_minutes_today >= $data->downtime;
+
+    return response()->json([
+        'status' => true,
+        'data' => [
+            'used_minutes_today' => $data->used_minutes_today,
+            'downtime_target' => $data->downtime,
+            'target_reached' => $targetReached,
+            'remaining_minutes' => $data->downtime ? max(0, $data->downtime - $data->used_minutes_today) : null,
+            'last_reset_date' => $data->last_reset_date,
+        ]
+    ], 200);
+}
+}
+
